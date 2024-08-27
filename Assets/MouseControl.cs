@@ -18,7 +18,7 @@ public class MouseControl : MonoBehaviour
     {
         // Use a raycast to point the player towards the mouse pointer
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        float turn = Mathf.Atan2(-ray.origin.z + transform.position.z, ray.origin.x - transform.position.x) * Mathf.Rad2Deg + 90.0f;
+        float turn = Mathf.Atan2(-ray.origin.z + cam.transform.position.z, ray.origin.x - cam.transform.position.x) * Mathf.Rad2Deg + 90.0f;
         transform.rotation = Quaternion.Euler(0, turn, 0);
     }
 }
