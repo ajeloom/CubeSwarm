@@ -9,6 +9,7 @@ public class MouseControl : MonoBehaviour
     [SerializeField] private Texture2D cursorTexture;
     [SerializeField] private CursorMode cursorMode = CursorMode.Auto;
     [SerializeField] private Vector2 hotSpot = Vector2.zero;
+    public LayerMask mask;
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +23,14 @@ public class MouseControl : MonoBehaviour
     {
         // Use a raycast to point the player towards the mouse pointer
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        float turn = Mathf.Atan2(-ray.origin.z + cam.transform.position.z, ray.origin.x - cam.transform.position.x) * Mathf.Rad2Deg + 90.0f;
-        transform.rotation = Quaternion.Euler(0, turn, 0);
+
+        RaycastHit hit;
+        if (Physics.Raycast(cam.transform.position, ray.direction, out hit, Mathf.Infinity, mask)) {
+            // Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
+            
+            // Use a raycast to point the player towards the mouse pointer
+            float turn = Mathf.Atan2(-ray.origin.z + cam.transform.position.z, ray.origin.x - cam.transform.position.x) * Mathf.Rad2Deg + 90.0f;
+            transform.rotation = Quaternion.Euler(0, turn, 0);
+        }
     }
 }
