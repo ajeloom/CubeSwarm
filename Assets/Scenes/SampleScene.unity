@@ -681,6 +681,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79750e38ce7f24044bd179c59c582b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursorTexture: {fileID: 2800000, guid: bc3fb7954738279469e17d29e57f5740, type: 3}
+  cursorMode: 0
+  hotSpot: {x: 22.5, y: -22.5}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

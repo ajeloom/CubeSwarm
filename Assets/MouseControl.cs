@@ -6,11 +6,15 @@ using UnityEngine;
 public class MouseControl : MonoBehaviour
 {
     private Camera cam;
+    [SerializeField] private Texture2D cursorTexture;
+    [SerializeField] private CursorMode cursorMode = CursorMode.Auto;
+    [SerializeField] private Vector2 hotSpot = Vector2.zero;
 
     // Start is called before the first frame update
     void Start()
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
     }
 
     // Update is called once per frame
