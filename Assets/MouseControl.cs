@@ -10,6 +10,7 @@ public class MouseControl : MonoBehaviour
     [SerializeField] private CursorMode cursorMode = CursorMode.Auto;
     [SerializeField] private Vector2 hotSpot = Vector2.zero;
     public LayerMask mask;
+    public GameObject projectile;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,14 @@ public class MouseControl : MonoBehaviour
             // Use a raycast to point the player towards the mouse pointer
             float turn = Mathf.Atan2(-ray.origin.z + cam.transform.position.z, ray.origin.x - cam.transform.position.x) * Mathf.Rad2Deg + 90.0f;
             transform.rotation = Quaternion.Euler(0, turn, 0);
+
+            // Shoot a bullet in the direction player faces
+            if (Input.GetMouseButtonDown(0)) {
+                GameObject ball = Instantiate(projectile, transform.position + transform.forward, transform.rotation);
+
+                Projectile bullet = ball.GetComponent<Projectile>();
+                bullet.Fire(transform.forward);
+            }
         }
     }
 }
