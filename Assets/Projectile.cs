@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private Rigidbody body;
-    private float bulletSpeed = 35.0f;
+    [SerializeField] private float bulletSpeed = 35.0f;
+    [SerializeField] private DamageComponent damageComponent;
 
     private GameObject player;
 
@@ -25,7 +27,15 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    // This function will make the projectile move in the direction that the player is aiming at
     public void Fire(Vector3 direction) {
         body.velocity = direction * bulletSpeed;
+    }
+
+    // This function will call the damage function from the enemy the projectile hits
+    // Projectile will only collide with enemies through the use of tags
+    private void OnCollisionEnter(Collision collision) {
+        damageComponent.Damage(collision);
+        Destroy(gameObject);
     }
 }
