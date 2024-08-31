@@ -792,6 +792,7 @@ GameObject:
   - component: {fileID: 1983300946}
   - component: {fileID: 1983300947}
   - component: {fileID: 1983300948}
+  - component: {fileID: 1983300949}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -1050,6 +1051,19 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &1983300949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983300940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6632f31158c6b2d429a99da8773a5014, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthNumber: 50
 --- !u!1001 &5877234436321986046
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1058,6 +1072,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 189534267713713556, guid: 8bcc5be214d9ba144b91a20058be7985, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1983300940}
     - target: {fileID: 1974446378002959510, guid: 8bcc5be214d9ba144b91a20058be7985, type: 3}
       propertyPath: m_Name
       value: Zombie
