@@ -35,7 +35,9 @@ public class Projectile : MonoBehaviour
     // This function will call the damage function from the enemy the projectile hits
     // Projectile will only collide with enemies through the use of tags
     private void OnCollisionEnter(Collision collision) {
-        damageComponent.Damage(collision);
+        if (collision.gameObject.tag == "Enemy") {
+            damageComponent.Damage(collision);
+        }
         Destroy(gameObject);
     }
 }

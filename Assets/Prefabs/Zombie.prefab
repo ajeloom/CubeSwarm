@@ -120,9 +120,10 @@ GameObject:
   - component: {fileID: 4931468204001740629}
   - component: {fileID: 4293507616140613683}
   - component: {fileID: 189534267713713556}
+  - component: {fileID: 3705793946274060916}
   m_Layer: 8
   m_Name: Zombie
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -222,7 +223,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1974446378002959510}
   serializedVersion: 4
-  m_Mass: 5
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -266,3 +267,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2064a47555b20c448bc221a5d5bfaebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  speed: 5
+  damageComponent: {fileID: 3705793946274060916}
+--- !u!114 &3705793946274060916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974446378002959510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 179d055c8b76bbf4d94fe934687311b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageNumber: 10

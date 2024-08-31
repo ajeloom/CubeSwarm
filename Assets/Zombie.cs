@@ -8,11 +8,13 @@ public class Zombie : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     [SerializeField] private float speed = 5.0f;
+    [SerializeField] private DamageComponent damageComponent;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player");
+        damageComponent = GetComponent<DamageComponent>();
     }
 
     // Update is called once per frame
@@ -26,5 +28,11 @@ public class Zombie : MonoBehaviour
         float zDist = -player.transform.position.z + transform.position.z;
         float turn = Mathf.Atan2(zDist, xDist) * Mathf.Rad2Deg + 90.0f;
         transform.rotation = Quaternion.Euler(0, turn, 0);
+    }
+
+    private void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.tag == "Player") {
+            damageComponent.Damage(collision);
+        }
     }
 }
