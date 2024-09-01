@@ -29,10 +29,4 @@ public class Zombie : MonoBehaviour
         float turn = Mathf.Atan2(zDist, xDist) * Mathf.Rad2Deg + 90.0f;
         transform.rotation = Quaternion.Euler(0, turn, 0);
     }
-
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Player") {
-            damageComponent.Damage(collision);
-        }
-    }
 }

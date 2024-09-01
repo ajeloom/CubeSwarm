@@ -283,3 +283,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageNumber: 10
+  knockback: 15
+  hittableTag: Player

@@ -683,6 +683,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie
       objectReference: {fileID: 0}
+    - target: {fileID: 3705793946274060916, guid: 8bcc5be214d9ba144b91a20058be7985, type: 3}
+      propertyPath: knockback
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4931468204001740629, guid: 8bcc5be214d9ba144b91a20058be7985, type: 3}
       propertyPath: m_Mass
       value: 2

@@ -28,16 +28,13 @@ public class Projectile : MonoBehaviour
     }
 
     // This function will make the projectile move in the direction that the player is aiming at
-    public void Fire(Vector3 direction) {
+    public void Fire(Vector3 direction) 
+    {
         body.velocity = direction * bulletSpeed;
     }
 
-    // This function will call the damage function from the enemy the projectile hits
-    // Projectile will only collide with enemies through the use of tags
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Enemy") {
-            damageComponent.Damage(collision);
-        }
+    private void OnCollisionEnter() 
+    {
         Destroy(gameObject);
     }
 }
