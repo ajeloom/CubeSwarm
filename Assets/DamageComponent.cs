@@ -10,7 +10,7 @@ public class DamageComponent : MonoBehaviour
     [SerializeField] private float knockback = 5.0f;
 
     private bool hitted = false;
-    [SerializeField] private string hittableTag;
+    public string hittableTag;
 
     // Start is called before the first frame update
     void Start()
