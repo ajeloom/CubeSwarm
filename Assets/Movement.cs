@@ -31,6 +31,6 @@ public class Movement : MonoBehaviour
         }
 
         // Make the camera follow the player
-        cam.transform.position = transform.position + new Vector3(-8, 10, 0);
+        cam.transform.position = transform.position + new Vector3(-10.5f, 10.0f, 0.0f);
     }
 }
