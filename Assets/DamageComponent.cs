@@ -47,4 +47,14 @@ public class DamageComponent : MonoBehaviour
     {
         hitted = false;
     }
+
+    public void ChangeDamage(float newDamage)
+    {
+        damageNumber = newDamage;
+    }
+
+    public void ChangeKnockback(float newKnockback)
+    {
+        knockback = newKnockback;
+    }
 }

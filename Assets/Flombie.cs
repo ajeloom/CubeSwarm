@@ -57,14 +57,14 @@ public class Flombie : MonoBehaviour
             Projectile bullet = ball.GetComponent<Projectile>();
             DamageComponent dc = bullet.GetComponent<DamageComponent>();
             dc.hittableTag = "Player";
-            bullet.Fire(transform.forward);
+            bullet.Fire(transform.forward, 35.0f);
 
             // Wait a second before you can attack again
-            StartCoroutine(ExampleCoroutine());
+            StartCoroutine(Wait());
         }
     }
 
-    private IEnumerator ExampleCoroutine()
+    private IEnumerator Wait()
     {
         yield return new WaitForSeconds(1.5f);
         isAttacking = false;

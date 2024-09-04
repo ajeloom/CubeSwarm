@@ -6,8 +6,6 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private Rigidbody body;
-    [SerializeField] private float bulletSpeed = 35.0f;
-    [SerializeField] private DamageComponent damageComponent;
 
     private GameObject player;
 
@@ -28,7 +26,7 @@ public class Projectile : MonoBehaviour
     }
 
     // This function will make the projectile move in the direction that the player is aiming at
-    public void Fire(Vector3 direction) 
+    public void Fire(Vector3 direction, float bulletSpeed) 
     {
         body.velocity = direction * bulletSpeed;
     }
