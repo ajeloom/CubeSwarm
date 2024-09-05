@@ -27,7 +27,7 @@ public class DamageComponent : MonoBehaviour
     public void Damage(Collision collision, Vector3 direction)
     {
         HealthComponent health = collision.gameObject.GetComponent<HealthComponent>();
-        health.healthNumber -= damageNumber;
+        health.currentHP -= damageNumber;
 
         collision.rigidbody.velocity = direction * knockback;
     }
