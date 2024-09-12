@@ -6,11 +6,13 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] private float speed = 8;
     private Camera cam;
+    Vector3 camPosition;
 
     // Start is called before the first frame update
     void Start()
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        camPosition = cam.transform.position;
     }
 
     // Update is called once per frame
@@ -31,6 +33,6 @@ public class Movement : MonoBehaviour
         }
 
         // Make the camera follow the player
-        cam.transform.position = transform.position + new Vector3(-10.5f, 10.0f, 0.0f);
+        cam.transform.position = transform.position + camPosition;
     }
 }
