@@ -8,6 +8,7 @@ public class Zombie : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private DamageComponent damageComponent;
+    private HealthComponent healthComponent;
     private Rigidbody body;
 
     // Start is called before the first frame update
@@ -15,6 +16,7 @@ public class Zombie : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         damageComponent = GetComponent<DamageComponent>();
+        healthComponent = GetComponent<HealthComponent>();
 
         body = GetComponent<Rigidbody>();
     }
@@ -29,7 +31,9 @@ public class Zombie : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, turn, 0);
 
         // Move towards the player
-        Move();
+        if (!healthComponent.GetTakingDamage()) {
+            Move();
+        }
     }
 
     private void Move()

@@ -7,6 +7,7 @@ public class Flombie : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private DamageComponent damageComponent;
+    private HealthComponent healthComponent;
     private Rigidbody body;
     public GameObject projectile;
 
@@ -17,6 +18,7 @@ public class Flombie : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         damageComponent = GetComponent<DamageComponent>();
+        healthComponent = GetComponent<HealthComponent>();
         body = GetComponent<Rigidbody>();
     }
 
@@ -31,11 +33,13 @@ public class Flombie : MonoBehaviour
 
         // Get distance between player and monster
         float distance = Mathf.Sqrt(Mathf.Pow(xDist, 2) + Mathf.Pow(zDist, 2));
-        if (distance > 7.5f) {
-            Move();
-        }
-        else {            
-            Attack();
+        if (!healthComponent.GetTakingDamage()) {
+            if (distance > 7.5f) {
+                Move();
+            }
+            else {            
+                Attack();
+            }
         }
     }
 

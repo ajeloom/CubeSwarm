@@ -27,6 +27,7 @@ public class DamageComponent : MonoBehaviour
     {
         HealthComponent health = collision.gameObject.GetComponent<HealthComponent>();
         health.currentHP -= damageNumber;
+        health.SetTakingDamage(true);
 
         collision.rigidbody.AddForce(direction * knockback, ForceMode.Impulse);
     }
