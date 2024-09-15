@@ -148,8 +148,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 5053158665236402934}
-  bulletSpeed: 35
-  damageComponent: {fileID: 8964084468696992202}
 --- !u!114 &8964084468696992202
 MonoBehaviour:
   m_ObjectHideFlags: 0

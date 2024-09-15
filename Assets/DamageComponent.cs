@@ -28,7 +28,7 @@ public class DamageComponent : MonoBehaviour
         HealthComponent health = collision.gameObject.GetComponent<HealthComponent>();
         health.currentHP -= damageNumber;
 
-        collision.rigidbody.velocity = direction * knockback;
+        collision.rigidbody.AddForce(direction * knockback, ForceMode.Impulse);
     }
 
     // This function will call the damage function from the enemy the projectile hits

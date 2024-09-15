@@ -12,7 +12,6 @@ public class Flombie : MonoBehaviour
 
     private bool isAttacking = false;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +21,7 @@ public class Flombie : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // Turn towards the player
         float xDist = player.transform.position.x - transform.position.x;
@@ -43,7 +42,7 @@ public class Flombie : MonoBehaviour
     // Move to a position close to the player
     private void Move()
     {
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+        body.velocity = transform.forward * speed;
     }
 
     // Shoot a projectile towards the player
