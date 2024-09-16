@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Flombie : MonoBehaviour
+public class Flombie : Entity
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private float speed = 5.0f;
     [SerializeField] private DamageComponent damageComponent;
     private HealthComponent healthComponent;
-    private Rigidbody body;
     public GameObject projectile;
 
     private bool isAttacking = false;
@@ -34,8 +32,9 @@ public class Flombie : MonoBehaviour
         // Get distance between player and monster
         float distance = Mathf.Sqrt(Mathf.Pow(xDist, 2) + Mathf.Pow(zDist, 2));
         if (!healthComponent.GetTakingDamage()) {
+            // Move closer to player if too far
             if (distance > 7.5f) {
-                Move();
+                Move(transform.forward);
             }
             else {            
                 Attack();
@@ -43,13 +42,7 @@ public class Flombie : MonoBehaviour
         }
     }
 
-    // Move to a position close to the player
-    private void Move()
-    {
-        body.velocity = transform.forward * speed;
-    }
-
-    // Shoot a projectile towards the player
+    // Shoot a projectile towards the player when closeby
     private void Attack() 
     {
         if (!isAttacking) {

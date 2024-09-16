@@ -254,7 +254,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6632f31158c6b2d429a99da8773a5014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthNumber: 70
+  maxHP: 50
+  currentHP: 0
 --- !u!114 &5992092630376035508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,7 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a625f4508cddf4491497258eec6185, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 5
+  body: {fileID: 8992104340522508417}
   player: {fileID: 0}
-  speed: 5
   damageComponent: {fileID: 0}
   projectile: {fileID: 4773737281214919604, guid: cf341521a62957c4e8e8c8ddc4eb69a2, type: 3}

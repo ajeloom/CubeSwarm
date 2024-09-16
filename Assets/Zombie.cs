@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Zombie : MonoBehaviour
+public class Zombie : Entity
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private float speed = 5.0f;
     [SerializeField] private DamageComponent damageComponent;
     private HealthComponent healthComponent;
-    private Rigidbody body;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +15,6 @@ public class Zombie : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         damageComponent = GetComponent<DamageComponent>();
         healthComponent = GetComponent<HealthComponent>();
-
         body = GetComponent<Rigidbody>();
     }
 
@@ -32,12 +29,7 @@ public class Zombie : MonoBehaviour
 
         // Move towards the player
         if (!healthComponent.GetTakingDamage()) {
-            Move();
+            Move(transform.forward);
         }
-    }
-
-    private void Move()
-    {
-        body.velocity = transform.forward * speed;
     }
 }

@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Movement : Entity
 {
-    [SerializeField] private float speed = 8;
     private Camera cam;
     private Vector3 camPosition;
-    private Rigidbody body;
     private Vector3 direction;
 
     // Start is called before the first frame update
@@ -34,10 +32,5 @@ public class Movement : MonoBehaviour
 
         // Make the camera follow the player
         cam.transform.position = transform.position + camPosition;
-    }
-
-    void Move(Vector3 direction)
-    {
-        body.velocity = direction * speed;
     }
 }
