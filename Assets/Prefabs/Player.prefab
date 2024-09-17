@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 3957274330947085796}
   - component: {fileID: 6157804055741817301}
   - component: {fileID: 1913067586873599313}
+  - component: {fileID: 1630409778371721255}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -597,8 +598,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory:
-  - {fileID: 6241077235288263594, guid: 0770d2acb9d33db4abb64496fd0e17a1, type: 3}
-  - {fileID: 619820848281322253, guid: c33e2e2669b2844468b7b955d7a62e06, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &1630409778371721255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4218536842624998107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12dc13dee0bf59e409ce9e76fe623dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pistol: {fileID: 2697493879183277189}
+  shotgun: {fileID: 8992723837660168978}
 --- !u!1 &4240092378812028578
 GameObject:
   m_ObjectHideFlags: 0

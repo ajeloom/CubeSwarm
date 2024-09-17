@@ -13,7 +13,7 @@ public class HealthBar : MonoBehaviour
     {
         // Get the health bar image
         GameObject canvas = transform.GetChild(0).gameObject;
-        GameObject bar = canvas.transform.GetChild(1).gameObject;
+        GameObject bar = canvas.transform.GetChild(2).gameObject;
         healthBar = bar.GetComponent<Image>();
 
         // Get the player's health component

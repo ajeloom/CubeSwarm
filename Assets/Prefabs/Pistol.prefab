@@ -258,5 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   magSize: 8
   maxAmmo: 80
+  totalInMag: 8
+  totalAmmo: 80
   projectile: {fileID: 4773737281214919604, guid: cf341521a62957c4e8e8c8ddc4eb69a2, type: 3}
   isAttacking: 0
