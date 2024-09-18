@@ -12,7 +12,7 @@ public class Movement : Entity
     void Start()
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        camPosition = cam.transform.position;
+        camPosition = cam.transform.position + new Vector3(0.0f, -1.0f, 0.0f);
 
         body = GetComponent<Rigidbody>();
         direction = Vector3.zero;
