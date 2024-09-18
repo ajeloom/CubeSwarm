@@ -6,14 +6,13 @@ using UnityEngine;
 public class Zombie : Entity
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private DamageComponent damageComponent;
     private HealthComponent healthComponent;
+    [SerializeField] private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        damageComponent = GetComponent<DamageComponent>();
         healthComponent = GetComponent<HealthComponent>();
         body = GetComponent<Rigidbody>();
     }
@@ -27,9 +26,23 @@ public class Zombie : Entity
         float turn = Mathf.Atan2(zDist, xDist) * Mathf.Rad2Deg + 90.0f;
         transform.rotation = Quaternion.Euler(0, turn, 0);
 
-        // Move towards the player
+        float distance = Mathf.Sqrt(Mathf.Pow(xDist, 2) + Mathf.Pow(zDist, 2));
         if (!healthComponent.GetTakingDamage()) {
             Move(transform.forward);
+
+            animator.SetBool("isTakingDamage", false);
+            
+            // Change to attack animation when close to the player
+            if (distance <= 2.5f) {
+                animator.SetTrigger("Attack");
+            }
+            else {
+                animator.ResetTrigger("Attack");
+            }
+        }
+        else {
+            animator.ResetTrigger("Attack");
+            animator.SetBool("isTakingDamage", true);
         }
     }
 }
