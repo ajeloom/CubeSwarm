@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    [SerializeField] private GameObject pistol;
-    [SerializeField] private GameObject shotgun;
+    private GameObject pistol;
+    private GameObject shotgun;
 
     // Start is called before the first frame update
     void Start()
     {
+        Player player = GetComponent<Player>();
+        GameObject gunHolder = player.GetGunHolder();
+        pistol = gunHolder.transform.GetChild(0).gameObject;
+        shotgun = gunHolder.transform.GetChild(1).gameObject;
+
         pistol.SetActive(true);
         shotgun.SetActive(false);
     }

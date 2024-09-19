@@ -7,7 +7,7 @@ public class Pistol : Gun
     protected override void Shoot()
     {
         totalInMag--;
-        GameObject ball = Instantiate(projectile, transform.parent.parent.position + transform.parent.parent.forward, transform.parent.parent.rotation);
+        GameObject ball = Instantiate(projectile, transform.parent.position + (transform.parent.forward * 2), transform.parent.rotation);
 
         // Exclude this layers that the projectile can collide with
         SphereCollider collider = ball.GetComponent<SphereCollider>();

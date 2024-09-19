@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Flombie : Entity
 {
-    [SerializeField] private GameObject player;
-    [SerializeField] private DamageComponent damageComponent;
+    private GameObject player;
     private HealthComponent healthComponent;
     public GameObject projectile;
 
@@ -15,7 +14,6 @@ public class Flombie : Entity
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        damageComponent = GetComponent<DamageComponent>();
         healthComponent = GetComponent<HealthComponent>();
         body = GetComponent<Rigidbody>();
     }

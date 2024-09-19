@@ -25,4 +25,9 @@ public class Player : MonoBehaviour
             inventory[0] = item.GetItem();
         }
     }
+
+    public GameObject GetGunHolder()
+    {
+        return transform.Find("Gunholder").gameObject;
+    }
 }

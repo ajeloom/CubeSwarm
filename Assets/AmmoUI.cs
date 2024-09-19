@@ -9,7 +9,6 @@ public class AmmoUI : MonoBehaviour
     private TextMeshProUGUI ammo;
     private GameObject pistol;
     private GameObject shotgun;
-    private GameObject player;
     private GameObject reloadSprite;
 
     // Start is called before the first frame update
@@ -22,10 +21,10 @@ public class AmmoUI : MonoBehaviour
         reloadSprite = canvas.transform.GetChild(4).gameObject;
         reloadSprite.SetActive(false);
 
-        player = GameObject.FindGameObjectWithTag("Player");
-        GameObject temp = player.transform.GetChild(1).gameObject;
-        pistol = temp.transform.GetChild(0).gameObject;
-        shotgun = temp.transform.GetChild(1).gameObject;
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        GameObject gunHolder = player.GetGunHolder();
+        pistol = gunHolder.transform.GetChild(0).gameObject;
+        shotgun = gunHolder.transform.GetChild(1).gameObject;
     }
 
     // Update is called once per frame

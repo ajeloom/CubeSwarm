@@ -5,7 +5,6 @@ using UnityEngine;
 public class ItemPickup : MonoBehaviour
 {
     [SerializeField] private GameObject item;
-    private GameObject player;
     private GameObject weapon;
 
     private string[] weaponStrings = {"Pistol", "Shotgun"};
@@ -13,9 +12,9 @@ public class ItemPickup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        GameObject temp = player.transform.GetChild(1).gameObject;
-        weapon = temp.transform.GetChild(FindWeaponSlot()).gameObject;
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        GameObject gunHolder = player.GetGunHolder();
+        weapon = gunHolder.transform.GetChild(FindWeaponSlot()).gameObject;
     }
 
     // Update is called once per frame

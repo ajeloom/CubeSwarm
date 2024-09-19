@@ -8,9 +8,9 @@ public class Shotgun : Gun
     private Vector3 GetRandomPosition()
     {
         Vector3 pos;
-        pos.x = Random.Range(-1.2f, 1.2f) + transform.parent.parent.position.x + transform.parent.parent.forward.x;
-        pos.y = Random.Range(-0.2f, 0.2f) + transform.parent.parent.position.y + transform.parent.parent.forward.y;
-        pos.z = Random.Range(-1.2f, 1.2f) + transform.parent.parent.position.z + transform.parent.parent.forward.z;
+        pos.x = Random.Range(-1.2f, 1.2f) + transform.parent.position.x + (transform.parent.forward.x * 2);
+        pos.y = Random.Range(-0.2f, 0.2f) + transform.parent.position.y + (transform.parent.forward.y * 2);
+        pos.z = Random.Range(-1.2f, 1.2f) + transform.parent.position.z + (transform.parent.forward.z * 2);
 
         return pos;
     }
@@ -19,7 +19,7 @@ public class Shotgun : Gun
     {
         totalInMag--;
         for (int i = 0; i < 7; i++) {
-            GameObject ball = Instantiate(projectile, GetRandomPosition(), transform.parent.parent.rotation);
+            GameObject ball = Instantiate(projectile, GetRandomPosition(), transform.parent.rotation);
 
             ball.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 

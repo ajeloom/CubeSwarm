@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Zombie : Entity
 {
-    [SerializeField] private GameObject player;
+    private GameObject player;
     private HealthComponent healthComponent;
     [SerializeField] private Animator animator;
 

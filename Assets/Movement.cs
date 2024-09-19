@@ -7,6 +7,7 @@ public class Movement : Entity
     private Camera cam;
     private Vector3 camPosition;
     private Vector3 direction;
+    [SerializeField] private Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,12 @@ public class Movement : Entity
     {
         // Get player input
         direction = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
+        if (direction != Vector3.zero) {
+            animator.SetBool("isMoving", true);
+        }
+        else {
+            animator.SetBool("isMoving", false);
+        }
     }
 
     // Update is called once per frame

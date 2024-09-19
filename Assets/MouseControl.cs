@@ -13,6 +13,7 @@ public class MouseControl : MonoBehaviour
     public GameObject projectile;
     private LineRenderer line;
     private Rigidbody body;
+    private Vector3 lineOrigin;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,7 @@ public class MouseControl : MonoBehaviour
         Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
         line = GetComponent<LineRenderer>();
         body = GetComponent<Rigidbody>();
+        lineOrigin = line.GetPosition(0);
     }
 
     // Update is called once per frame
@@ -34,12 +36,12 @@ public class MouseControl : MonoBehaviour
             // Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow, 0, false);
 
             // Draws a visual line that shows where the player shoots
-            line.SetPosition(0, transform.position);
-            Vector3 vec = new Vector3(transform.forward.x * hit.distance + transform.position.x, transform.position.y, transform.forward.z * hit.distance + transform.position.z);
+            line.SetPosition(0, transform.position + lineOrigin);
+            Vector3 vec = new Vector3(transform.forward.x * hit.distance + transform.position.x, transform.position.y + lineOrigin.y, transform.forward.z * hit.distance + transform.position.z);
             line.SetPosition(1, vec);
 
             // Use a raycast to point the player towards the mouse pointer
-            float turn = Mathf.Atan2(-ray.origin.z + transform.position.z, ray.origin.x - transform.position.x) * Mathf.Rad2Deg + 90.0f;
+            float turn = Mathf.Atan2(-ray.origin.z + transform.position.z, ray.origin.x - transform.position.x) * Mathf.Rad2Deg + 90.0f - 5.0f;
             body.MoveRotation(Quaternion.Euler(0, turn, 0));
         }
     }

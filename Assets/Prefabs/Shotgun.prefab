@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1582556283515631628
 Transform:
   m_ObjectHideFlags: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
   magSize: 2
   maxAmmo: 40
   totalInMag: 2
-  totalAmmo: 40
+  totalAmmoLeft: 0
   projectile: {fileID: 4773737281214919604, guid: cf341521a62957c4e8e8c8ddc4eb69a2, type: 3}
   isAttacking: 0
   isReloading: 0

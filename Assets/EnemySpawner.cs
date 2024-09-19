@@ -9,7 +9,6 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float timer = 3.0f;
     private bool spawnedEnemy = false;
     
-
     // Start is called before the first frame update
     void Start()
     {
