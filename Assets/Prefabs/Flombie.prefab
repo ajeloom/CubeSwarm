@@ -239,7 +239,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &8898730948115159371
@@ -285,6 +285,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   body: {fileID: 8992104340522508417}
-  player: {fileID: 0}
-  damageComponent: {fileID: 0}
   projectile: {fileID: 4773737281214919604, guid: cf341521a62957c4e8e8c8ddc4eb69a2, type: 3}

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Movement : Entity
 {
     private Camera cam;
+    private Camera screen;
     private Vector3 camPosition;
     private Vector3 direction;
     [SerializeField] private Animator animator;
@@ -13,7 +14,9 @@ public class Movement : Entity
     void Start()
     {
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        camPosition = cam.transform.position + new Vector3(0.0f, -1.0f, 0.0f);
+        camPosition = cam.transform.position;
+
+        screen = GameObject.FindGameObjectWithTag("Screen").GetComponent<Camera>();
 
         body = GetComponent<Rigidbody>();
         direction = Vector3.zero;
@@ -29,6 +32,9 @@ public class Movement : Entity
         else {
             animator.SetBool("isMoving", false);
         }
+
+        // Make the camera follow the player
+        cam.transform.position = screen.transform.position = transform.position + camPosition;
     }
 
     // Update is called once per frame
@@ -36,8 +42,5 @@ public class Movement : Entity
     {
         // Move in the direction that the player presses
         Move(direction);
-
-        // Make the camera follow the player
-        cam.transform.position = transform.position + camPosition;
     }
 }
