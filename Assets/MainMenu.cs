@@ -6,24 +6,19 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private Button playButton, quitButton;
-
     // Start is called before the first frame update
     void Start()
     {
+        Button playButton = transform.Find("Play").gameObject.GetComponent<Button>();
+        Button quitButton = transform.Find("Quit").gameObject.GetComponent<Button>();
+
         playButton.onClick.AddListener(PlayButtonPressed);
         quitButton.onClick.AddListener(QuitButtonPressed);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void PlayButtonPressed()
     {
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Stage1");
     }
 
     private void QuitButtonPressed()

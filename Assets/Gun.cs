@@ -13,29 +13,36 @@ public class Gun : MonoBehaviour
     public bool isAttacking = false;
     public bool isReloading = false;
     protected bool canReload = false;
-    
+
+    private GameManager gm;
+
     // Start is called before the first frame update
     protected void Start()
     {
         totalInMag = magSize;
         totalAmmoLeft = maxAmmo;
+
+        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
+        gm = obj.GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     protected void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking && !isReloading && totalInMag > 0) {
-            isAttacking = true;
-            Shoot();
-        }
+        if (!gm.CheckIfPaused()) {
+            if (Input.GetMouseButtonDown(0) && !isAttacking && !isReloading && totalInMag > 0) {
+                isAttacking = true;
+                Shoot();
+            }
 
-        if (totalInMag < magSize && totalAmmoLeft > 0 && !isReloading) {
-            canReload = true;
-        }
+            if (totalInMag < magSize && totalAmmoLeft > 0 && !isReloading) {
+                canReload = true;
+            }
 
-        if ((Input.GetKeyDown(KeyCode.R) && canReload) || (totalInMag == 0 && canReload)) {
-            canReload = false;
-            Reload();
+            if ((Input.GetKeyDown(KeyCode.R) && canReload) || (totalInMag == 0 && canReload)) {
+                canReload = false;
+                Reload();
+            }
         }
     }
 
