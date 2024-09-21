@@ -16,6 +16,9 @@ public class Gun : MonoBehaviour
 
     private GameManager gm;
 
+    [SerializeField] protected float damage = 10.0f;
+    [SerializeField] protected float knockback = 10.0f;
+
     // Start is called before the first frame update
     protected void Start()
     {

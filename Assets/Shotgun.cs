@@ -4,39 +4,53 @@ using UnityEngine;
 
 public class Shotgun : Gun
 {
-    // Gets a random position for each shotgun pellet
-    private Vector3 GetRandomPosition()
-    {
-        Vector3 pos;
-        pos.x = Random.Range(-1.2f, 1.2f) + transform.parent.position.x + (transform.parent.forward.x * 2);
-        pos.y = Random.Range(-0.2f, 0.2f) + transform.parent.position.y + (transform.parent.forward.y * 2);
-        pos.z = Random.Range(-1.2f, 1.2f) + transform.parent.position.z + (transform.parent.forward.z * 2);
-
-        return pos;
-    }
-
     protected override void Shoot()
     {
         totalInMag--;
         for (int i = 0; i < 7; i++) {
-            GameObject ball = Instantiate(projectile, GetRandomPosition(), transform.parent.rotation);
+            GameObject ball = Instantiate(projectile, transform.parent.position + (transform.parent.forward * 2.5f), transform.parent.rotation);
 
-            ball.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            ball.transform.localScale *= 0.8f;
 
             // Exclude this layers that the projectile can collide with
-            SphereCollider collider = ball.GetComponent<SphereCollider>();
+            CapsuleCollider collider = ball.GetComponent<CapsuleCollider>();
             LayerMask mask = LayerMask.GetMask("Player", "Projectile");
             collider.excludeLayers = mask;
 
-            // Change the damage
+            // Change the damage and knockback
             Projectile bullet = ball.GetComponent<Projectile>();
             DamageComponent dc = bullet.GetComponent<DamageComponent>();
-            dc.ChangeDamage(7.0f);
-            dc.ChangeKnockback(15.0f);
-
-            bullet.Fire(transform.forward, 30.0f);
+            dc.ChangeDamage(damage);
+            dc.ChangeKnockback(knockback);
+            
+            switch (i) {
+                case 0:
+                    bullet.Fire(GetRandomDirection(0.0f, 0.0f), 30.0f);
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                    bullet.Fire(GetRandomDirection(0.0f, 1.0f), 30.0f);
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                    bullet.Fire(GetRandomDirection(-1.0f, 0.0f), 30.0f);
+                    break;
+            }
         }
 
         StartCoroutine(ShotDelay(0.6f));
+    }
+
+    // Gets a random position for each shotgun pellet
+    private Vector3 GetRandomDirection(float minRange, float maxRange)
+    {
+        Vector3 pos;
+        pos.x = Random.Range(minRange, maxRange) + transform.forward.x * 2.5f;
+        pos.y = 0.0f;
+        pos.z = Random.Range(minRange, maxRange) + transform.forward.z * 2.5f;
+
+        return pos;
     }
 }

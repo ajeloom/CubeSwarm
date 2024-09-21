@@ -287,7 +287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3265037317432396975, guid: 47fdb639051a1404fbe16b49cfc001aa, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1032,6 +1032,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1222062421941063846, guid: 2a2c294181d06cc4fb1aa1bbf466cf38, type: 3}
+      propertyPath: projectile
+      value: 
+      objectReference: {fileID: 4773737281214919604, guid: f228b169ea3a5a14eb4b0f9eca9e6db8, type: 3}
     - target: {fileID: 1859307093648143160, guid: 2a2c294181d06cc4fb1aa1bbf466cf38, type: 3}
       propertyPath: m_Name
       value: Player(Soldier)
@@ -1075,6 +1079,10 @@ PrefabInstance:
     - target: {fileID: 1859307093648306008, guid: 2a2c294181d06cc4fb1aa1bbf466cf38, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6605474778508795846, guid: 2a2c294181d06cc4fb1aa1bbf466cf38, type: 3}
+      propertyPath: damage
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
