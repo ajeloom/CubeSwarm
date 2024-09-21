@@ -8,6 +8,9 @@ using TMPro;
 public class GameOver : MonoBehaviour
 {
     private GameManager gm;
+    private TextMeshProUGUI highScoreText;
+    private TextMeshProUGUI scoreText;
+    private bool newHighScore = false;
 
     // Start is called before the first frame update
     void Start()
@@ -21,9 +24,23 @@ public class GameOver : MonoBehaviour
         GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
         gm = obj.GetComponent<GameManager>();
 
-        GameObject scoreText = transform.GetChild(2).gameObject;
-        TextMeshProUGUI score = scoreText.GetComponent<TextMeshProUGUI>();
-        score.SetText("Score: " + gm.score.ToString());
+        int highScore = PlayerPrefs.GetInt("HighScore");
+        if (gm.score > highScore) {
+            newHighScore = true;
+            highScore = gm.score;
+            PlayerPrefs.SetInt("HighScore", highScore);
+        }
+
+        highScoreText = GetScoreText("High Score", highScore);
+        scoreText = GetScoreText("Score", gm.score);
+    }
+
+    void Update()
+    {
+        if (newHighScore) {
+            highScoreText.color = LerpYellow();
+            scoreText.color = LerpYellow();
+        }
     }
 
     private void RetryButtonPressed()
@@ -35,5 +52,18 @@ public class GameOver : MonoBehaviour
     private void MainMenuButtonPressed()
     {
         gm.ReturnToMainMenu();
+    }
+
+    private TextMeshProUGUI GetScoreText(string childName, int score)
+    {
+        GameObject obj = transform.Find(childName).gameObject;
+        TextMeshProUGUI text = obj.GetComponent<TextMeshProUGUI>();
+        text.SetText(childName + ": " + score.ToString());
+        return text;
+    }
+
+    private Color LerpYellow()
+    {
+        return Color.Lerp(Color.white, Color.yellow, Mathf.Sin(Time.time * 5));
     }
 }
