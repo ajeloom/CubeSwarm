@@ -670,6 +670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   body: {fileID: 0}
+  score: 50
   animator: {fileID: 2418107499619691853}
 --- !u!114 &1181999878224059229
 MonoBehaviour:

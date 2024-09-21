@@ -7,6 +7,8 @@ public class Entity : MonoBehaviour
     [SerializeField] private float movementSpeed = 5.0f;
     public Rigidbody body;
 
+    [SerializeField] private int score;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,5 +24,10 @@ public class Entity : MonoBehaviour
     public void Move(Vector3 direction)
     {
         body.velocity = direction * movementSpeed;
+    }
+
+    public int GetScore()
+    {
+        return score;
     }
 }

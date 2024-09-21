@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private GameObject[] inventory = new GameObject[2];
+    // [SerializeField] private GameObject[] inventory = new GameObject[2];
 
     // Start is called before the first frame update
     void Start()
@@ -20,10 +20,10 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter(Collision collision) 
     {
-        if (collision.gameObject.layer == 10) {
-            ItemPickup item = collision.gameObject.GetComponent<ItemPickup>();
-            inventory[0] = item.GetItem();
-        }
+        // if (collision.gameObject.layer == 10) {
+        //     ItemPickup item = collision.gameObject.GetComponent<ItemPickup>();
+        //     inventory[0] = item.GetItem();
+        // }
     }
 
     public GameObject GetGunHolder()

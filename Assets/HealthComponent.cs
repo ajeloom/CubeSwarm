@@ -19,6 +19,12 @@ public class HealthComponent : MonoBehaviour
     void Update()
     {
         if (currentHP <= 0.0f) {
+            GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
+            GameManager gm = obj.GetComponent<GameManager>();
+
+            Entity entity = GetComponent<Entity>();
+
+            gm.score += entity.GetScore();
             Destroy(gameObject);
         }
 

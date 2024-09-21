@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    private GameManager gm;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,18 +16,19 @@ public class PauseMenu : MonoBehaviour
 
         resumeButton.onClick.AddListener(ResumeButtonPressed);
         quitButton.onClick.AddListener(QuitButtonPressed);
+
+        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
+        gm = obj.GetComponent<GameManager>();
     }
 
     private void ResumeButtonPressed()
     {
-        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-        GameManager gm = obj.GetComponent<GameManager>();
         gm.ResumeGame();
     }
 
     private void QuitButtonPressed()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene("MainMenu");
+        gm.ReturnToMainMenu();
     }
 }

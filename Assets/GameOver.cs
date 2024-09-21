@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameOver : MonoBehaviour
 {
+    private GameManager gm;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,15 +17,23 @@ public class GameOver : MonoBehaviour
 
         retryButton.onClick.AddListener(RetryButtonPressed);
         mainMenuButton.onClick.AddListener(MainMenuButtonPressed);
+
+        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
+        gm = obj.GetComponent<GameManager>();
+
+        GameObject scoreText = transform.GetChild(2).gameObject;
+        TextMeshProUGUI score = scoreText.GetComponent<TextMeshProUGUI>();
+        score.SetText("Score: " + gm.score.ToString());
     }
 
     private void RetryButtonPressed()
     {
+        gm.ResetScore();
         SceneManager.LoadScene("Stage1");
     }
 
     private void MainMenuButtonPressed()
     {
-        SceneManager.LoadScene("MainMenu");
+        gm.ReturnToMainMenu();
     }
 }
