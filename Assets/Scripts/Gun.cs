@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    [SerializeField] private int magSize;
-    [SerializeField] private int maxAmmo;
+    [SerializeField] protected int magSize;
+    [SerializeField] protected int maxAmmo;
     public int totalInMag;
     public int totalAmmoLeft;
     [SerializeField] protected GameObject projectile;
@@ -19,6 +19,9 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float damage = 10.0f;
     [SerializeField] protected float knockback = 10.0f;
 
+    protected AudioSource audioSource;
+    protected AudioClip shootSFX;
+
     // Start is called before the first frame update
     protected void Start()
     {
@@ -27,6 +30,9 @@ public class Gun : MonoBehaviour
 
         GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
         gm = obj.GetComponent<GameManager>();
+
+        audioSource = GetComponent<AudioSource>();
+        shootSFX = audioSource.clip;
     }
 
     // Update is called once per frame
@@ -69,16 +75,17 @@ public class Gun : MonoBehaviour
         }
 
         
+        audioSource.clip = shootSFX;
 
         isReloading = false;
     }
 
     protected virtual void Shoot()
     {
-
+        audioSource.PlayOneShot(shootSFX);
     }
 
-    protected void Reload()
+    protected virtual void Reload()
     {
         isReloading = true;
         int reloadedAmount = magSize - totalInMag;

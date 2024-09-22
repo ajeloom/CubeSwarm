@@ -9,12 +9,24 @@ public class Zombie : Entity
     private HealthComponent healthComponent;
     [SerializeField] private Animator animator;
 
+    private AudioSource audioSource;
+    private bool playingSound = false;
+
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         healthComponent = GetComponent<HealthComponent>();
         body = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    void Update()
+    {
+        if (!playingSound) {
+            playingSound = true;
+            StartCoroutine(PlaySound(GetRandomTime()));
+        }
     }
 
     // Update is called once per frame
@@ -44,5 +56,19 @@ public class Zombie : Entity
             animator.ResetTrigger("Attack");
             animator.SetBool("isTakingDamage", true);
         }
+    }
+
+    // Get a random time before replaying sound
+    private float GetRandomTime()
+    {
+        return Random.Range(1.0f, 20.0f);
+    }
+
+    private IEnumerator PlaySound(float time)
+    {
+        yield return new WaitForSeconds(time);
+        audioSource.Play();
+        yield return new WaitForSeconds(audioSource.clip.length);
+        playingSound = false;
     }
 }

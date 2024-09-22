@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Shotgun : Gun
 {
+    [SerializeField] private AudioClip reloadSFX;
+    private bool startReloadSFX = false;
+
     protected override void Shoot()
     {
+        base.Shoot();
         totalInMag--;
         for (int i = 0; i < 7; i++) {
             GameObject ball = Instantiate(projectile, transform.parent.position + (transform.parent.forward * 2.5f), transform.parent.rotation);
@@ -52,5 +56,23 @@ public class Shotgun : Gun
         pos.z = Random.Range(minRange, maxRange) + transform.forward.z * 2.5f;
 
         return pos;
+    }
+
+    protected override void Reload()
+    {
+        base.Reload();
+        if (!startReloadSFX) {
+            startReloadSFX = true;
+            for (int i = 0; i < magSize; i++) {
+                StartCoroutine(PlaySound(0.2f + (i * 0.5f), reloadSFX, 3.5f));
+            }
+            startReloadSFX = false;
+        }
+    }
+
+    protected IEnumerator PlaySound(float time, AudioClip sound, float volume)
+    {
+        yield return new WaitForSeconds(time);
+        audioSource.PlayOneShot(sound, volume);
     }
 }
