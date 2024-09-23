@@ -495,6 +495,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9066016896492328743}
     m_Modifications:
+    - target: {fileID: 2838349231224645817, guid: 0770d2acb9d33db4abb64496fd0e17a1, type: 3}
+      propertyPath: reloadSFX1
+      value: 
+      objectReference: {fileID: 8300000, guid: 34ea78a946a1e0f45b4f5f4b66a3adc8, type: 3}
+    - target: {fileID: 2838349231224645817, guid: 0770d2acb9d33db4abb64496fd0e17a1, type: 3}
+      propertyPath: reloadSFX2
+      value: 
+      objectReference: {fileID: 8300000, guid: 0905de625d82b624b8992dbde57265cc, type: 3}
     - target: {fileID: 3493584624310608619, guid: 0770d2acb9d33db4abb64496fd0e17a1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -337,14 +337,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4079585160908832483, guid: 2a2c294181d06cc4fb1aa1bbf466cf38, type: 3}
-      propertyPath: reloadSFX1
-      value: 
-      objectReference: {fileID: 8300000, guid: 34ea78a946a1e0f45b4f5f4b66a3adc8, type: 3}
-    - target: {fileID: 4079585160908832483, guid: 2a2c294181d06cc4fb1aa1bbf466cf38, type: 3}
-      propertyPath: reloadSFX2
-      value: 
-      objectReference: {fileID: 8300000, guid: 0905de625d82b624b8992dbde57265cc, type: 3}
     - target: {fileID: 7732147577546873290, guid: 2a2c294181d06cc4fb1aa1bbf466cf38, type: 3}
       propertyPath: m_Loop
       value: 0

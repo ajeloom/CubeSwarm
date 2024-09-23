@@ -14,7 +14,7 @@ public class Gun : MonoBehaviour
     public bool isReloading = false;
     protected bool canReload = false;
 
-    private GameManager gm;
+    protected GameManager gm;
 
     [SerializeField] protected float damage = 10.0f;
     [SerializeField] protected float knockback = 10.0f;
@@ -61,7 +61,7 @@ public class Gun : MonoBehaviour
         isAttacking = false;
     }
 
-    protected IEnumerator ReloadDelay(float time, int reloadedAmount)
+    protected virtual IEnumerator ReloadDelay(float time, int reloadedAmount)
     {
         yield return new WaitForSeconds(time);
         
@@ -74,7 +74,6 @@ public class Gun : MonoBehaviour
             totalAmmoLeft -= reloadedAmount;
         }
 
-        
         audioSource.clip = shootSFX;
 
         isReloading = false;

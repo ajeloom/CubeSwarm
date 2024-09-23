@@ -58,21 +58,28 @@ public class Shotgun : Gun
         return pos;
     }
 
-    protected override void Reload()
+    protected override IEnumerator ReloadDelay(float time, int reloadedAmount)
     {
-        base.Reload();
         if (!startReloadSFX) {
             startReloadSFX = true;
-            for (int i = 0; i < magSize; i++) {
-                StartCoroutine(PlaySound(0.2f + (i * 0.5f), reloadSFX, 3.5f));
+            for (int i = 0; i < reloadedAmount; i++) {
+                StartCoroutine(PlayReloadSound(0.2f + (i * 0.5f), reloadSFX, 3.5f));
             }
             startReloadSFX = false;
         }
+
+        yield return new WaitForSeconds(0.2f + (reloadedAmount * 0.5f));
+        
+        audioSource.clip = shootSFX;
+
+        isReloading = false;
     }
 
-    protected IEnumerator PlaySound(float time, AudioClip sound, float volume)
+    protected IEnumerator PlayReloadSound(float time, AudioClip sound, float volume)
     {
         yield return new WaitForSeconds(time);
         audioSource.PlayOneShot(sound, volume);
+        totalInMag++;
+        totalAmmoLeft--;
     }
 }
