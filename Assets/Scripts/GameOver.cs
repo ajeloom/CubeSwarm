@@ -46,7 +46,7 @@ public class GameOver : MonoBehaviour
     private void RetryButtonPressed()
     {
         gm.ResetScore();
-        SceneManager.LoadScene("Stage1");
+        SceneManager.LoadScene("Stage");
     }
 
     private void MainMenuButtonPressed()

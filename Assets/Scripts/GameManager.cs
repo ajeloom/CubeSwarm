@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
 
     public int score = 0;
 
+    private GameObject stagePrefab;
+    private bool stageLoaded = false;
+
     void Awake()
     {
         if (instance == null) {
@@ -30,7 +33,12 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         Scene scene = SceneManager.GetActiveScene();
-        if (scene.name == "Stage1" || scene.name == "Test") {
+        if (scene.name == "Stage") {
+            if (!stageLoaded) {
+                stageLoaded = true;
+                LoadStage();
+            }
+
             player = GameObject.FindGameObjectWithTag("Player");
             HealthComponent healthComponent = player.GetComponent<HealthComponent>();
             if (healthComponent.currentHP <= 0.0f) {
@@ -45,6 +53,13 @@ public class GameManager : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.Escape) && isPaused) {
                 ResumeGame();
             }
+        }
+        else if (scene.name == "SelectionScreen") {
+            SelectionScreen screen = GameObject.FindWithTag("Selection").GetComponent<SelectionScreen>();
+            stagePrefab = screen.GetStage();
+        }
+        else {
+            stageLoaded = false;
         }
     }
 
@@ -70,5 +85,10 @@ public class GameManager : MonoBehaviour
     public bool CheckIfPaused()
     {
         return isPaused;
+    }
+
+    public void LoadStage()
+    {
+        Instantiate(stagePrefab, Vector3.zero, transform.rotation);
     }
 }

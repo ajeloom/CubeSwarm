@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
 
     private void PlayButtonPressed()
     {
-        SceneManager.LoadScene("Stage1");
+        SceneManager.LoadScene("SelectionScreen");
     }
 
     private void QuitButtonPressed()
