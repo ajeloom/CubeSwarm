@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : NetworkBehaviour
 {
     private GameManager gm;
+    private PlayerControls player;
 
     // Start is called before the first frame update
     void Start()
@@ -19,16 +21,21 @@ public class PauseMenu : MonoBehaviour
 
         GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
         gm = obj.GetComponent<GameManager>();
+
+        player = transform.parent.gameObject.GetComponent<PlayerControls>();
     }
 
     private void ResumeButtonPressed()
     {
-        gm.ResumeGame();
+        Destroy(gameObject);
+        player.ChangePause(false);
+        if (!gm.isMultiplayer) {
+            Time.timeScale = 1;
+        }
     }
 
     private void QuitButtonPressed()
     {
-        Time.timeScale = 1;
         gm.ReturnToMainMenu();
     }
 }

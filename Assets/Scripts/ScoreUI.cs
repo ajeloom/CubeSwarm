@@ -21,13 +21,13 @@ public class ScoreUI : MonoBehaviour
         GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
         gm = obj.GetComponent<GameManager>();
 
-        score.SetText("Score: " + gm.score.ToString());
+        score.SetText("Score: " + gm.score.Value.ToString());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (localScore < gm.score && !incrementingScore) {
+        if (localScore < gm.score.Value && !incrementingScore) {
             incrementingScore = true;
             localScore++;
             score.SetText("Score: " + localScore.ToString());

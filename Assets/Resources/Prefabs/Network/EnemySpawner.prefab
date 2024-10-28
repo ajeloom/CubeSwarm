@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 25518231792576988}
+  - component: {fileID: -5574986433800344746}
   - component: {fileID: 6274466685809487859}
   m_Layer: 0
   m_Name: EnemySpawner
@@ -32,6 +33,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5574986433800344746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6812690709593068367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1107645775
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &6274466685809487859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44,5 +66,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5402c3ba8fb799049bd00acf0294ed7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 1974446378002959510, guid: 8bcc5be214d9ba144b91a20058be7985, type: 3}
-  timer: 3
+  enemy: {fileID: 3265037317432396975, guid: b1c091bb4bf3e1840bc85db160da3ed9, type: 3}
+  timer: 15
+  spawnedEnemy: 0

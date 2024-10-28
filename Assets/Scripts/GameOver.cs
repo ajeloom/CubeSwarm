@@ -25,14 +25,14 @@ public class GameOver : MonoBehaviour
         gm = obj.GetComponent<GameManager>();
 
         int highScore = PlayerPrefs.GetInt("HighScore");
-        if (gm.score > highScore) {
+        if (gm.score.Value > highScore) {
             newHighScore = true;
-            highScore = gm.score;
+            highScore = gm.score.Value;
             PlayerPrefs.SetInt("HighScore", highScore);
         }
 
         highScoreText = GetScoreText("High Score", highScore);
-        scoreText = GetScoreText("Score", gm.score);
+        scoreText = GetScoreText("Score", gm.score.Value);
     }
 
     void Update()

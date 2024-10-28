@@ -1,21 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine.Networking;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.Networking.Transport;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public static GameManager instance = null;
     private GameObject player;
 
-    private bool isPaused = false;
-    [SerializeField] private GameObject pausePrefab;
-    private GameObject pauseMenu;
+    public bool isMultiplayer = false;
 
-    public int score = 0;
+    public NetworkVariable<int> score = new NetworkVariable<int>(0);
 
     private GameObject stagePrefab;
     private bool stageLoaded = false;
+
+    public string currentScene;
+    private NetworkManager networkManager;
+
+    private bool checkedPlayerHealth = false;
 
     void Awake()
     {
@@ -33,30 +39,39 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         Scene scene = SceneManager.GetActiveScene();
-        if (scene.name == "Stage") {
-            if (!stageLoaded) {
-                stageLoaded = true;
-                LoadStage();
-            }
-
-            player = GameObject.FindGameObjectWithTag("Player");
-            HealthComponent healthComponent = player.GetComponent<HealthComponent>();
-            if (healthComponent.currentHP <= 0.0f) {
-                SceneManager.LoadScene("GameOver");
-            }
-
-            if (Input.GetKeyDown(KeyCode.Escape) && !isPaused) {
-                isPaused = true;
-                Time.timeScale = 0;
-                pauseMenu = Instantiate(pausePrefab, Vector3.zero, transform.rotation);
-            }
-            else if (Input.GetKeyDown(KeyCode.Escape) && isPaused) {
-                ResumeGame();
-            }
+        currentScene = scene.name;
+        if (scene.name == "SelectionScreen") {
+            isMultiplayer = false;
+            networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkManager>();
         }
-        else if (scene.name == "SelectionScreen") {
-            SelectionScreen screen = GameObject.FindWithTag("Selection").GetComponent<SelectionScreen>();
-            stagePrefab = screen.GetStage();
+        else if (scene.name == "MultiplayerSelection") {
+            isMultiplayer = true;
+            networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkManager>();
+        }
+        else if (scene.name == "Game") {
+            if (IsHost) {
+                if (!stageLoaded) {
+                    stageLoaded = true;
+
+                    // Spawn the stage
+                    var instance = Instantiate(stagePrefab);
+                    var instanceNetworkObject = instance.GetComponent<NetworkObject>();
+                    instanceNetworkObject.Spawn();
+
+                    // Spawn the enemy spawners
+                    for (int i = 0; i < 4; i++) {
+                        GameObject stg = GameObject.FindGameObjectWithTag("Stage");
+                        GameObject obj = stg.transform.Find("EnemySpawn" + i.ToString()).gameObject;
+                        var spawner = Resources.Load<GameObject>("Prefabs/Network/EnemySpawner");
+                        instance = Instantiate(spawner, obj.transform.position, obj.transform.rotation);
+                        instanceNetworkObject = instance.GetComponent<NetworkObject>();
+                        instanceNetworkObject.Spawn();
+                    }
+                }
+
+                // Keep track of every player's health
+                checkPlayersHealth();
+            }
         }
         else {
             stageLoaded = false;
@@ -65,30 +80,51 @@ public class GameManager : MonoBehaviour
 
     public void ResetScore()
     {
-        score = 0;
-    }
-
-    public void ResumeGame()
-    {
-        isPaused = false;
-        Time.timeScale = 1;
-        Destroy(pauseMenu);
+        score.Value = 0;
     }
 
     public void ReturnToMainMenu()
     {
-        isPaused = false;
-        SceneManager.LoadScene("MainMenu");
         ResetScore();
+        if (isMultiplayer) {
+            if (networkManager.IsHost) {
+                networkManager.SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            }
+            else {
+                networkManager.Shutdown();
+                Destroy(networkManager.gameObject);
+                SceneManager.LoadScene("MainMenu");
+            }
+        }
+        else {
+            Time.timeScale = 1;
+            SceneManager.LoadScene("MainMenu");
+        }
     }
 
-    public bool CheckIfPaused()
+    public void SetStage(GameObject obj) 
     {
-        return isPaused;
+        stagePrefab = obj;
     }
 
-    public void LoadStage()
+    public void checkPlayersHealth()
     {
-        Instantiate(stagePrefab, Vector3.zero, transform.rotation);
+        // Keep track of every player's health
+        if (!checkedPlayerHealth) {
+            checkedPlayerHealth = true;
+
+            for (int i = 0; i < NetworkManager.ConnectedClients.Count; i++) {
+                player = NetworkManager.ConnectedClients[(ulong)i].PlayerObject.gameObject;
+                if (player.GetComponent<HealthComponent>().currentHP.Value > 0.0f) {
+                    checkedPlayerHealth = false;
+                    return;
+                }
+            }
+
+            // Game Over when all players are dead
+            networkManager.SceneManager.LoadScene("MPGameOver", LoadSceneMode.Single);
+            
+            checkedPlayerHealth = false;
+        }
     }
 }

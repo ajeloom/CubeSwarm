@@ -1,20 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class Gun : NetworkBehaviour
 {
     [SerializeField] protected int magSize;
     [SerializeField] protected int maxAmmo;
     public int totalInMag;
     public int totalAmmoLeft;
     [SerializeField] protected GameObject projectile;
+    [SerializeField] protected GameObject localProjectile;
     
     public bool isAttacking = false;
     public bool isReloading = false;
-    protected bool canReload = false;
+    public bool canReload = false;
+    public bool canShoot = false;
+
+    public bool swapWeapons = false;
 
     protected GameManager gm;
+    public NetworkManager networkManager;
 
     [SerializeField] protected float damage = 10.0f;
     [SerializeField] protected float knockback = 10.0f;
@@ -33,29 +39,27 @@ public class Gun : MonoBehaviour
 
         audioSource = GetComponent<AudioSource>();
         shootSFX = audioSource.clip;
+
+        if (gm.isMultiplayer)
+            networkManager = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>();
     }
 
     // Update is called once per frame
     protected void Update()
     {
-        if (!gm.CheckIfPaused()) {
-            if (Input.GetMouseButtonDown(0) && !isAttacking && !isReloading && totalInMag > 0) {
-                isAttacking = true;
-                Shoot();
-            }
+        if (!isAttacking && !isReloading && totalInMag > 0) {
+            canShoot = true;
+        }
+        else if (isAttacking || isReloading || totalInMag <= 0) {
+            canShoot = false;
+        }
 
-            if (totalInMag < magSize && totalAmmoLeft > 0 && !isReloading) {
-                canReload = true;
-            }
-
-            if ((Input.GetKeyDown(KeyCode.R) && canReload) || (totalInMag == 0 && canReload)) {
-                canReload = false;
-                Reload();
-            }
+        if (totalInMag < magSize && totalAmmoLeft > 0 && !isReloading) {
+            canReload = true;
         }
     }
 
-    protected IEnumerator ShotDelay(float time)
+    public IEnumerator ShotDelay(float time)
     {
         yield return new WaitForSeconds(time);
         isAttacking = false;
@@ -79,15 +83,21 @@ public class Gun : MonoBehaviour
         isReloading = false;
     }
 
-    protected virtual void Shoot()
+    public virtual void Shoot()
     {
         audioSource.PlayOneShot(shootSFX);
     }
 
-    protected virtual void Reload()
+    public virtual void Reload()
     {
         isReloading = true;
         int reloadedAmount = magSize - totalInMag;
         StartCoroutine(ReloadDelay(1.0f, reloadedAmount));
+    }
+
+    public void SwapWeapons()
+    {
+        isAttacking = false;
+        isReloading = false;
     }
 }

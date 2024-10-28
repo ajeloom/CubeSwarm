@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public class Entity : NetworkBehaviour
 {
     [SerializeField] private float movementSpeed = 5.0f;
     public Rigidbody body;

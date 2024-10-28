@@ -1,34 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Pistol : Gun
 {
     [SerializeField] private AudioClip reloadSFX1, reloadSFX2;
 
-    protected override void Shoot()
+    public override void Shoot()
     {
+        if (!IsOwner) {
+            return;
+        }
+
         base.Shoot();
         totalInMag--;
-        GameObject ball = Instantiate(projectile, transform.parent.position + (transform.parent.forward * 2.5f), transform.parent.rotation);
 
-        // Exclude this layers that the projectile can collide with
-        CapsuleCollider collider = ball.GetComponent<CapsuleCollider>();
-        LayerMask mask = LayerMask.GetMask("Player", "Projectile");
-        collider.excludeLayers = mask;
-
-        // Change the damage and knockback
-        Projectile bullet = ball.GetComponent<Projectile>();
-        DamageComponent dc = bullet.GetComponent<DamageComponent>();
-        dc.ChangeDamage(damage);
-        dc.ChangeKnockback(knockback);
-
-        bullet.Fire(transform.forward, 60.0f);
+        SpawnBulletLocalBullet();
+        if (IsHost) {
+            SpawnBullet();
+        }
+        else {
+            // Spawn a bullet on the client side with no hit-detection
+            // GameObject instance = Instantiate(localProjectile, transform.parent.position + (transform.parent.forward * 2.5f), transform.parent.rotation);
+            // ChangeBulletParameters(instance);
+            SpawnBulletServerRpc();
+        }
 
         StartCoroutine(ShotDelay(0.05f));
     }
 
-    protected override void Reload()
+    public override void Reload()
     {
         base.Reload();
         StartCoroutine(PlaySound(0.1f, reloadSFX1, 2.5f));
@@ -39,5 +41,42 @@ public class Pistol : Gun
     {
         yield return new WaitForSeconds(time);
         audioSource.PlayOneShot(sound, volume);
+    }
+
+    void SpawnBullet() {
+        GameObject instance = Instantiate(projectile, transform.parent.position + (transform.parent.forward * 2.5f), transform.parent.rotation);
+        NetworkObject instanceNetworkObject = instance.GetComponent<NetworkObject>();
+        ChangeBulletParameters(instance);
+        instanceNetworkObject.Spawn();
+    }
+
+    void SpawnBulletLocalBullet() {
+        GameObject instance = Instantiate(localProjectile, transform.parent.position + (transform.parent.forward * 2.5f), transform.parent.rotation);
+        // ChangeBulletParameters(instance);
+
+        // Exclude this layers that the projectile can collide with
+        CapsuleCollider collider = instance.GetComponent<CapsuleCollider>();
+        LayerMask mask = LayerMask.GetMask("Player", "Projectile");
+        collider.excludeLayers = mask;
+    }
+
+    void ChangeBulletParameters(GameObject instance)
+    {
+        // Exclude this layers that the projectile can collide with
+        CapsuleCollider collider = instance.GetComponent<CapsuleCollider>();
+        LayerMask mask = LayerMask.GetMask("Player", "Projectile");
+        collider.excludeLayers = mask;
+
+        // Change the damage and knockback
+        Projectile bullet = instance.GetComponent<Projectile>();
+        DamageComponent dc = bullet.GetComponent<DamageComponent>();
+        dc.ChangeDamage(damage);
+        dc.ChangeKnockback(knockback);
+    }
+
+    [ServerRpc]
+    void SpawnBulletServerRpc()
+    {
+        SpawnBullet();
     }
 }

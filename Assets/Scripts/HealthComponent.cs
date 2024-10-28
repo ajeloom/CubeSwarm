@@ -1,36 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class HealthComponent : MonoBehaviour
+public class HealthComponent : NetworkBehaviour
 {
-    public float maxHP = 50.0f;
-    public float currentHP;
+    public NetworkVariable<float> maxHP = new NetworkVariable<float>(50.0f);
+    public NetworkVariable<float> currentHP;
 
+    private bool hpSet = false;
     private bool takingDamage = false;
 
-    // Start is called before the first frame update
-    void Start()
+    public override void OnNetworkSpawn()
     {
-        currentHP = maxHP;
+        if (IsHost) {
+            currentHP.Value = maxHP.Value;
+            hpSet = true;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (currentHP <= 0.0f) {
-            GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-            GameManager gm = obj.GetComponent<GameManager>();
+        if (hpSet) {
+            if (currentHP.Value <= 0.0f) {
+                if (gameObject.tag == "Player") {
+                    
+                }
+                else {
+                    if (IsHost) {
+                        UpdateScore();
+                    }
+                    else {
+                        UpdateScoreServerRpc();
+                    }
+                }
+            }
 
-            Entity entity = GetComponent<Entity>();
-
-            gm.score += entity.GetScore();
-            Destroy(gameObject);
+            if (takingDamage) {
+                StartCoroutine(Wait(1.0f));
+            }
         }
+    }
 
-        if (takingDamage) {
-            StartCoroutine(Wait(1.0f));
-        }
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdateScoreServerRpc()
+    {
+        UpdateScore();
+    }
+
+    private void UpdateScore()
+    {
+        GameManager gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();        
+        Entity entity = GetComponent<Entity>();
+        gm.score.Value += entity.GetScore();
+        gameObject.GetComponent<NetworkObject>().Despawn();
     }
 
     private IEnumerator Wait(float time)

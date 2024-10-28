@@ -10,6 +10,7 @@ public class AmmoUI : MonoBehaviour
     private GameObject shotgun;
     private GameObject reloadSprite;
     private GameManager gm;
+    private PlayerControls player;
 
     // Start is called before the first frame update
     void Start()
@@ -21,19 +22,18 @@ public class AmmoUI : MonoBehaviour
         reloadSprite = canvas.transform.GetChild(4).gameObject;
         reloadSprite.SetActive(false);
 
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        GameObject gunHolder = player.GetGunHolder();
+        player = transform.parent.gameObject.GetComponent<PlayerControls>();
+        GameObject gunHolder = transform.parent.gameObject.GetComponent<Player>().GetGunHolder();
         pistol = gunHolder.transform.GetChild(0).gameObject;
         shotgun = gunHolder.transform.GetChild(1).gameObject;
 
-        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-        gm = obj.GetComponent<GameManager>();
+        gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!gm.CheckIfPaused()) {
+        if ((!player.GetPlayerPaused() && !gm.isMultiplayer) || gm.isMultiplayer) {
             if (pistol.gameObject.activeSelf == true) {
                 Pistol temp = pistol.GetComponent<Pistol>();
                 PrintText(temp);

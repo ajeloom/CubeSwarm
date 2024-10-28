@@ -7,7 +7,7 @@ public class Shotgun : Gun
     [SerializeField] private AudioClip reloadSFX;
     private bool startReloadSFX = false;
 
-    protected override void Shoot()
+    public override void Shoot()
     {
         base.Shoot();
         totalInMag--;

@@ -17,13 +17,13 @@ public class HealthBar : MonoBehaviour
         healthBar = bar.GetComponent<Image>();
 
         // Get the player's health component
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = transform.parent.gameObject;
         healthComponent = player.GetComponent<HealthComponent>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        healthBar.fillAmount = healthComponent.currentHP / healthComponent.maxHP;
+        healthBar.fillAmount = healthComponent.currentHP.Value / healthComponent.maxHP.Value;
     }
 }

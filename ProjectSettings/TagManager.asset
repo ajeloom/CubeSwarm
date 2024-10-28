@@ -8,6 +8,8 @@ TagManager:
   - Screen
   - GameManager
   - Selection
+  - NetworkManager
+  - Stage
   layers:
   - Default
   - TransparentFX

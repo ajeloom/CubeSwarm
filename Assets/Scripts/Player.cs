@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
     // [SerializeField] private GameObject[] inventory = new GameObject[2];
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        body = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -29,5 +30,10 @@ public class Player : MonoBehaviour
     public GameObject GetGunHolder()
     {
         return transform.Find("Gunholder").gameObject;
+    }
+
+    public Rigidbody GetRigidbody()
+    {
+        return body;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,15 +11,28 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         Button playButton = transform.Find("Play").gameObject.GetComponent<Button>();
+        Button multiplayerButton = transform.Find("Multiplayer").gameObject.GetComponent<Button>();
         Button quitButton = transform.Find("Quit").gameObject.GetComponent<Button>();
 
         playButton.onClick.AddListener(PlayButtonPressed);
+        multiplayerButton.onClick.AddListener(MultiplayerButtonPressed);
         quitButton.onClick.AddListener(QuitButtonPressed);
+
+        if (GameObject.FindWithTag("NetworkManager") != null) {
+            NetworkManager networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkManager>();
+            networkManager.Shutdown();
+            Destroy(networkManager.gameObject);
+        }
     }
 
     private void PlayButtonPressed()
     {
         SceneManager.LoadScene("SelectionScreen");
+    }
+
+    private void MultiplayerButtonPressed()
+    {
+        SceneManager.LoadScene("Lobby");
     }
 
     private void QuitButtonPressed()

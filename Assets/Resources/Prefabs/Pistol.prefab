@@ -101,7 +101,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -206,7 +206,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -262,10 +262,16 @@ MonoBehaviour:
   totalInMag: 8
   totalAmmoLeft: 0
   projectile: {fileID: 4773737281214919604, guid: f228b169ea3a5a14eb4b0f9eca9e6db8, type: 3}
+  localProjectile: {fileID: 4773737281214919604, guid: 76ab47594d6e7df45afa396afa7389a1, type: 3}
   isAttacking: 0
   isReloading: 0
+  canReload: 0
+  canShoot: 0
+  swapWeapons: 0
   damage: 10
   knockback: 10
+  reloadSFX1: {fileID: 0}
+  reloadSFX2: {fileID: 0}
 --- !u!82 &9100010514032197511
 AudioSource:
   m_ObjectHideFlags: 0
