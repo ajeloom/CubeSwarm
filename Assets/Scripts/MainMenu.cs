@@ -12,10 +12,12 @@ public class MainMenu : MonoBehaviour
     {
         Button playButton = transform.Find("Play").gameObject.GetComponent<Button>();
         Button multiplayerButton = transform.Find("Multiplayer").gameObject.GetComponent<Button>();
+        Button settingsButton = transform.Find("Settings").gameObject.GetComponent<Button>();
         Button quitButton = transform.Find("Quit").gameObject.GetComponent<Button>();
 
         playButton.onClick.AddListener(PlayButtonPressed);
         multiplayerButton.onClick.AddListener(MultiplayerButtonPressed);
+        settingsButton.onClick.AddListener(SettingsButtonPressed);
         quitButton.onClick.AddListener(QuitButtonPressed);
 
         if (GameObject.FindWithTag("NetworkManager") != null) {
@@ -33,6 +35,11 @@ public class MainMenu : MonoBehaviour
     private void MultiplayerButtonPressed()
     {
         SceneManager.LoadScene("Lobby");
+    }
+
+    private void SettingsButtonPressed()
+    {
+        SceneManager.LoadScene("Settings");
     }
 
     private void QuitButtonPressed()
