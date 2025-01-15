@@ -8,6 +8,9 @@ public class HealthComponent : NetworkBehaviour
     public NetworkVariable<float> maxHP = new NetworkVariable<float>(50.0f);
     public NetworkVariable<float> currentHP;
 
+    public GameObject ammoPrefab;
+    private bool spawnedAmmo = false;
+
     private bool hpSet = false;
     private bool takingDamage = false;
 
@@ -54,6 +57,18 @@ public class HealthComponent : NetworkBehaviour
         GameManager gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();        
         Entity entity = GetComponent<Entity>();
         gm.score.Value += entity.GetScore();
+
+        // Drop an ammo box
+        if (GetRandomDrop()) {
+            if (!spawnedAmmo) {
+                spawnedAmmo = true;
+                GameObject instance = Instantiate(Resources.Load<GameObject>("Prefabs/Itembox"), gameObject.transform);
+                NetworkObject instanceNetworkObject = instance.GetComponent<NetworkObject>();
+                instanceNetworkObject.Spawn();
+            }
+        }
+
+        StartCoroutine(Wait(1.0f));
         gameObject.GetComponent<NetworkObject>().Despawn();
     }
 
@@ -71,5 +86,13 @@ public class HealthComponent : NetworkBehaviour
     public bool GetTakingDamage()
     {
         return takingDamage;
+    }
+
+    // Gives the enemy a random chance to drop ammo
+    private bool GetRandomDrop()
+    {
+        float num = Random.Range(0, 2);
+        bool drop = (num >= 1) ? true : false;
+        return drop;
     }
 }

@@ -47,6 +47,10 @@ public class Gun : NetworkBehaviour
     // Update is called once per frame
     protected void Update()
     {
+        /* 
+         * Can shoot when not reloading and you have ammo
+         * Can't shoot when reloading or have no loaded ammo
+        */
         if (!isAttacking && !isReloading && totalInMag > 0) {
             canShoot = true;
         }
@@ -54,21 +58,31 @@ public class Gun : NetworkBehaviour
             canShoot = false;
         }
 
+        // Can reload when mag is not fully loaded and there's ammo
         if (totalInMag < magSize && totalAmmoLeft > 0 && !isReloading) {
             canReload = true;
         }
+
+        // Don't gain more ammo than the max amount
+        if (totalAmmoLeft > maxAmmo) {
+            totalAmmoLeft = maxAmmo;
+        }
     }
 
+    // Delays your shot so you can't spam your shots
     public IEnumerator ShotDelay(float time)
     {
         yield return new WaitForSeconds(time);
         isAttacking = false;
     }
 
+    // Handles how long a reload will take
     protected virtual IEnumerator ReloadDelay(float time, int reloadedAmount)
     {
         yield return new WaitForSeconds(time);
         
+        // Reload the ammo into mag
+        // Make sure you do not go below 0 ammo
         if (reloadedAmount > totalAmmoLeft) {
             totalInMag += totalAmmoLeft;
             totalAmmoLeft = 0;
@@ -78,16 +92,19 @@ public class Gun : NetworkBehaviour
             totalAmmoLeft -= reloadedAmount;
         }
 
+        // Set the sound back to the shooting one
         audioSource.clip = shootSFX;
 
         isReloading = false;
     }
 
+    // Play sound when you shoot
     public virtual void Shoot()
     {
         audioSource.PlayOneShot(shootSFX);
     }
 
+    // Reload ammo
     public virtual void Reload()
     {
         isReloading = true;

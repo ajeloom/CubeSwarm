@@ -485,8 +485,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6632f31158c6b2d429a99da8773a5014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 50
-  currentHP: 0
+  maxHP:
+    m_InternalValue: 50
+  currentHP:
+    m_InternalValue: 0
+  ammoPrefab: {fileID: 0}
 --- !u!114 &4195766816681189572
 MonoBehaviour:
   m_ObjectHideFlags: 0
