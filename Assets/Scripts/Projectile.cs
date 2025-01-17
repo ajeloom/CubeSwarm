@@ -10,6 +10,8 @@ public class Projectile : NetworkBehaviour
     private Vector3 initialPos = Vector3.zero;
     public NetworkObject networkObject;
 
+    [SerializeField] private AudioClip hitSound;
+
     private bool addedForce = false;
 
     // Start is called before the first frame update
@@ -49,11 +51,17 @@ public class Projectile : NetworkBehaviour
         body.AddForce(direction * bulletSpeed, ForceMode.VelocityChange);
     }
 
-    private void OnCollisionEnter() 
+    private void OnCollisionEnter(Collision collision) 
     {
         // DestroyObj();
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
         gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+        // Play sound when enemy gets hit by bullet
+        if (collision.collider.tag == "Enemy") {
+            SoundManager.instance.PlaySound(hitSound, transform, 0.4f);
+        }
+
         StartCoroutine(Wait(10.0f));
     }
 

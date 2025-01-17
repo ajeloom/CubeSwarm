@@ -56,7 +56,7 @@ public class ItemPickup : NetworkBehaviour
             ui.GainedAmmo(value);
 
             // Play sound
-            AudioSource.PlayClipAtPoint(pickupSFX, gameObject.transform.position);
+            SoundManager.instance.PlaySound(pickupSFX, transform, 0.3f);
 
             StartCoroutine(Wait(2.0f));
         }

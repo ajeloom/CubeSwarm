@@ -10,6 +10,8 @@ public class Entity : NetworkBehaviour
 
     [SerializeField] private int score;
 
+    [SerializeField] private AudioClip[] footstepAudioClips;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,5 +32,12 @@ public class Entity : NetworkBehaviour
     public int GetScore()
     {
         return score;
+    }
+
+    // Plays a footstep sound during the movement animations
+    private void PlayFootstepSound()
+    {
+        int i = Random.Range(0, footstepAudioClips.Length);
+        SoundManager.instance.PlaySound(footstepAudioClips[i], transform, 0.2f);
     }
 }

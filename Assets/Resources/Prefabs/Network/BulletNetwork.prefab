@@ -175,6 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 5053158665236402934}
   networkObject: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 85caf8c060b95471c9e8d85a8495525c, type: 3}
 --- !u!114 &8964084468696992202
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,15 +11,21 @@ public class Zombie : Entity
     private HealthComponent healthComponent;
     [SerializeField] private Animator animator;
 
-    private AudioSource audioSource;
+    [SerializeField] private AudioClip[] idleAudioClips;
+    [SerializeField] private AudioClip[] hurtAudioClips;
+
+    [SerializeField] private AudioClip deathAudioClip;
+
     private bool playingSound = false;
+
+    private bool playedIdleSound = false;
+    private bool playedHurtSound = false;
 
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
         healthComponent = GetComponent<HealthComponent>();
         body = GetComponent<Rigidbody>();
-        audioSource = GetComponent<AudioSource>();
         
         if (IsHost) {
             player = NetworkManager.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
@@ -72,10 +78,17 @@ public class Zombie : Entity
                 else {
                     animator.ResetTrigger("Attack");
                 }
+
+                playedHurtSound = false;
             }
             else {
                 animator.ResetTrigger("Attack");
                 animator.SetBool("isTakingDamage", true);
+                if (!playedHurtSound && !playedIdleSound) {
+                    playedHurtSound = true;
+                    int i = Random.Range(0, idleAudioClips.Length);
+                    SoundManager.instance.PlaySound(hurtAudioClips[i], transform, 0.5f);
+                }
             }
         }
     }
@@ -83,15 +96,22 @@ public class Zombie : Entity
     // Get a random time before replaying sound
     private float GetRandomTime()
     {
-        return Random.Range(1.0f, 20.0f);
+        return Random.Range(1.0f, 60.0f);
     }
 
     private IEnumerator PlaySound(float time)
     {
         yield return new WaitForSeconds(time);
-        audioSource.Play();
-        yield return new WaitForSeconds(audioSource.clip.length);
+
+        playedIdleSound = true;
+
+        // Pick a random sound
+        int i = Random.Range(0, idleAudioClips.Length);
+
+        SoundManager.instance.PlaySound(idleAudioClips[i], transform, 0.5f);
+        yield return new WaitForSeconds(idleAudioClips[i].length);
         playingSound = false;
+        playedIdleSound = false;
     }
 
     // Pick a random player
@@ -99,5 +119,11 @@ public class Zombie : Entity
     {
         int clientId = Random.Range(0, NetworkManager.ConnectedClients.Count);
         return (ulong)clientId;
+    }
+
+    // Play a sound when killed
+    public void PlayDeathSound()
+    {
+        SoundManager.instance.PlaySound(deathAudioClip, transform, 0.5f);
     }
 }

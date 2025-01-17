@@ -58,6 +58,9 @@ public class HealthComponent : NetworkBehaviour
         Entity entity = GetComponent<Entity>();
         gm.score.Value += entity.GetScore();
 
+        Zombie zombie = GetComponent<Zombie>();
+        zombie.PlayDeathSound();
+
         // Drop an ammo box
         if (GetRandomDrop()) {
             if (!spawnedAmmo) {

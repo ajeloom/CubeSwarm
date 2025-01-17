@@ -33,14 +33,15 @@ public class Pistol : Gun
     public override void Reload()
     {
         base.Reload();
-        StartCoroutine(PlaySound(0.1f, reloadSFX1, 2.5f));
-        StartCoroutine(PlaySound(0.6f, reloadSFX2, 2.0f));
+        StartCoroutine(PlaySound(0.1f, reloadSFX1, 2.0f));
+        StartCoroutine(PlaySound(0.6f, reloadSFX2, 1.5f));
     }
 
+    // Control when to play each sound
     protected IEnumerator PlaySound(float time, AudioClip sound, float volume)
     {
         yield return new WaitForSeconds(time);
-        audioSource.PlayOneShot(sound, volume);
+        SoundManager.instance.PlaySound(sound, transform, volume);
     }
 
     void SpawnBullet() {
