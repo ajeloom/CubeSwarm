@@ -7,7 +7,6 @@ public class PlayerControls : NetworkBehaviour
 {
     private Player player;
 
-    private Camera screen;
     [SerializeField] private Texture2D cursorTexture;
     [SerializeField] private Vector2 hotSpot = Vector2.zero;
     private CursorMode cursorMode = CursorMode.Auto;
@@ -16,7 +15,6 @@ public class PlayerControls : NetworkBehaviour
     private Ray ray;
 
     private Camera cam;
-    private Vector3 camPosition;
     private Vector3 direction;
     [SerializeField] private Animator animator;
 
@@ -38,18 +36,12 @@ public class PlayerControls : NetworkBehaviour
     private HealthComponent healthComponent;
     private int equippedGun = 1;
 
-
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) {
             return;
         }
         
-        cam = transform.Find("Camera").gameObject.GetComponent<Camera>();
-        camPosition = cam.transform.position;
-
-        screen = transform.Find("Screen").gameObject.GetComponent<Camera>();
-
         Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
 
         direction = Vector3.zero;
@@ -82,13 +74,13 @@ public class PlayerControls : NetworkBehaviour
             // Activate the camera for the current player
             if (!activateElements) {
                 activateElements = true;
-                cam.gameObject.SetActive(true);
-                screen.gameObject.SetActive(true);
                 canvas.SetActive(true);
-            }
 
-            // Make the camera follow the player
-            cam.transform.position = screen.transform.position = transform.position + camPosition;
+                // Set the main camera to follow the player
+                cam = Camera.main;
+                CameraFollow temp = cam.GetComponent<CameraFollow>();
+                temp.SetTarget(gameObject);
+            }
 
             // Handle animation for moving
             if (direction != Vector3.zero) {
@@ -103,7 +95,7 @@ public class PlayerControls : NetworkBehaviour
                 direction = new Vector3(Input.GetAxis("Vertical"), 0, Input.GetAxis("Horizontal"));
 
                 // Use a raycast to point the player towards the mouse pointer
-                ray = screen.ScreenPointToRay(Input.mousePosition);
+                ray = cam.ScreenPointToRay(Input.mousePosition);
 
                 // Switch weapons
                 if (Input.GetKeyDown(KeyCode.Alpha1) && equippedGun != 1) {
@@ -168,17 +160,20 @@ public class PlayerControls : NetworkBehaviour
             return;
         }
         
-        if (healthComponent.currentHP.Value > 0.0f && !playerPaused) {
+        if (healthComponent.currentHP.Value > 0.0f 
+                && !playerPaused 
+                && gm.currentScene == "Game") {
             // Move in the direction that the player presses
             player.Move(direction);
 
             RaycastHit hit;
-            if (Physics.Raycast(screen.transform.position, ray.direction, out hit, Mathf.Infinity, mask)) {
-                // Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow, 0, false);
+            if (Physics.Raycast(cam.transform.position, ray.direction, out hit, Mathf.Infinity, mask)) {
+                // Debug.DrawRay(cam.transform.position, ray.direction * hit.distance, Color.green, 0, false);
 
-                // Find how much to rotate the player in order to look at crosshair
-                float turn = Mathf.Atan2(-ray.origin.z + transform.position.z, ray.origin.x - transform.position.x) * Mathf.Rad2Deg + 90.0f - 5.0f;
-                player.GetRigidbody().MoveRotation(Quaternion.Euler(0, turn, 0));
+                // Rotate the player to look in the direction of the crosshair
+                Vector3 directionTarget = (hit.point - transform.position).normalized;
+                Quaternion lookRotation = Quaternion.LookRotation(directionTarget, Vector3.up);
+                player.GetRigidbody().rotation = lookRotation;
             }
         }
     }
