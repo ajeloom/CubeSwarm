@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class SoundManager : NetworkBehaviour
 {
-    public static SoundManager instance = null;
-    [SerializeField] private AudioSource audioSource;
+    public static SoundManager instance { get; private set; }
+    [SerializeField] private GameObject audioSourcePrefab;
 
     void Awake()
     {
@@ -28,16 +28,17 @@ public class SoundManager : NetworkBehaviour
 
     // Will create a new AudioSource in the scene 
     // that plays the given audio clip at the spawn location
-    public void PlaySound(AudioClip audio, Transform spawn, float volume)
+    public void PlaySound(AudioClip audioClip, Vector3 spawnLocation, float volume)
     {
-        AudioSource source = Instantiate(audioSource, spawn.position, Quaternion.identity);
+        GameObject obj = Instantiate(audioSourcePrefab, spawnLocation, Quaternion.identity);
 
         // Assign the sound and volume then play it
-        source.clip = audio;
-        source.volume = volume;
-        source.Play();
+        AudioSource audioSource = obj.GetComponent<AudioSource>();
+        audioSource.clip = audioClip;
+        audioSource.volume = volume;
+        audioSource.Play();
 
         // Destroy after sound is done playing
-        Destroy(source.gameObject, source.clip.length);
+        Destroy(obj.gameObject, audioSource.clip.length);
     }
 }

@@ -66,4 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 626cad825cfb2ac4496c2e278dce1241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 1134043111003154186, guid: 07433e2468e99304a8949475269adc34, type: 3}
+  audioSourcePrefab: {fileID: 2963268305380740672, guid: 07433e2468e99304a8949475269adc34, type: 3}
+  audioClip: {fileID: 0}
+  spawnLocation: {x: 0, y: 0, z: 0}
+  volume: 0

@@ -35,7 +35,7 @@ public class DamageComponent : NetworkBehaviour
             col = collision;
             hitted = true;
 
-            if (IsHost) {
+            if (IsServer) {
                 Damage();
             }
             else {

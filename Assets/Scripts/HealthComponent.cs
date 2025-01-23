@@ -16,7 +16,7 @@ public class HealthComponent : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsHost) {
+        if (IsServer) {
             currentHP.Value = maxHP.Value;
             hpSet = true;
         }
@@ -31,12 +31,7 @@ public class HealthComponent : NetworkBehaviour
                     
                 }
                 else {
-                    if (IsHost) {
-                        UpdateScore();
-                    }
-                    else {
-                        UpdateScoreServerRpc();
-                    }
+                    UpdateScoreServerRpc();
                 }
             }
 
@@ -46,22 +41,28 @@ public class HealthComponent : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
+    // Tells the server to update score to other clients
+    // because the client killed a zombie
+    [ServerRpc]
     private void UpdateScoreServerRpc()
     {
         UpdateScore();
     }
 
+    [ClientRpc]
+    private void PlayDeathSoundClientRpc()
+    {
+        Zombie zombie = GetComponent<Zombie>();
+        zombie.PlayDeathSound();
+    }
+
     private void UpdateScore()
     {
+        // Drop an ammo box
         GameManager gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();        
         Entity entity = GetComponent<Entity>();
         gm.score.Value += entity.GetScore();
 
-        Zombie zombie = GetComponent<Zombie>();
-        zombie.PlayDeathSound();
-
-        // Drop an ammo box
         if (GetRandomDrop()) {
             if (!spawnedAmmo) {
                 spawnedAmmo = true;
@@ -71,8 +72,8 @@ public class HealthComponent : NetworkBehaviour
             }
         }
 
-        StartCoroutine(Wait(1.0f));
         gameObject.GetComponent<NetworkObject>().Despawn();
+        PlayDeathSoundClientRpc();
     }
 
     private IEnumerator Wait(float time)

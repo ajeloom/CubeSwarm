@@ -18,22 +18,10 @@ public class ItemPickup : NetworkBehaviour
     private bool isPickedUp = false;
 
     // Start is called before the first frame update
-    void Start()
+    public override void OnNetworkSpawn()
     {
-        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        GameObject gunHolder = player.GetGunHolder();
-
-        // Only pistol works right now
-        weapon = gunHolder.transform.GetChild(0).gameObject;
-
         audioSource = GetComponent<AudioSource>();
         pickupSFX = audioSource.clip;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private void OnCollisionEnter(Collision collision) 
@@ -42,23 +30,26 @@ public class ItemPickup : NetworkBehaviour
         if (collision.collider.tag == "Player" && !isPickedUp) {
             isPickedUp = true;
 
-            // Hide the model
-            MeshRenderer mesh = GetComponent<MeshRenderer>();
-            mesh.enabled = false;
+            GameObject playerObj = collision.gameObject;
+            Player player = playerObj.GetComponent<Player>();
+            GameObject gunHolder = player.GetGunHolder();
+            weapon = gunHolder.transform.GetChild(0).gameObject;
 
             // Add ammo to your total amount
             Gun ammo = weapon.GetComponent<Gun>();
             ammo.totalAmmoLeft += value;
 
             // Print how much ammo gained
-            GameObject obj = collision.gameObject.transform.Find("HUD").gameObject;
+            GameObject obj = playerObj.transform.Find("HUD").gameObject;
             AmmoUI ui = obj.GetComponent<AmmoUI>();
-            ui.GainedAmmo(value);
+            if (ui != null) {
+                ui.GainedAmmo(value);
+            }
 
             // Play sound
-            SoundManager.instance.PlaySound(pickupSFX, transform, 0.3f);
+            SoundManager.instance.PlaySound(pickupSFX, transform.position, 0.3f);
 
-            StartCoroutine(Wait(2.0f));
+            DestroyBoxServerRpc();
         }
     }
 
@@ -79,9 +70,9 @@ public class ItemPickup : NetworkBehaviour
     }
 
     // For despawning the item after getting picked up
-    private IEnumerator Wait(float time)
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyBoxServerRpc()
     {
-        yield return new WaitForSeconds(time);
         gameObject.GetComponent<NetworkObject>().Despawn();
     }
 }

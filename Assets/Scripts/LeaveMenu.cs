@@ -24,7 +24,7 @@ public class LeaveMenu : NetworkBehaviour
 
     private void YesButtonPressed()
     {
-        if (networkManager.IsHost) {
+        if (networkManager.IsServer) {
             networkManager.SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         }
         else {

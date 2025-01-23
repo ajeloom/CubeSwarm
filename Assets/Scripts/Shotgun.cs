@@ -78,7 +78,7 @@ public class Shotgun : Gun
     protected IEnumerator PlayReloadSound(float time, AudioClip sound, float volume)
     {
         yield return new WaitForSeconds(time);
-        SoundManager.instance.PlaySound(sound, transform, volume);
+        SoundManager.instance.PlaySound(sound, transform.position, volume);
         totalInMag++;
         totalAmmoLeft--;
     }

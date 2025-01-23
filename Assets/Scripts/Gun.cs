@@ -101,7 +101,7 @@ public class Gun : NetworkBehaviour
     // Play sound when you shoot
     public virtual void Shoot()
     {
-        SoundManager.instance.PlaySound(shootSFX, transform, 0.6f);
+        SoundManager.instance.PlaySound(shootSFX, transform.position, 0.6f);
     }
 
     // Reload ammo

@@ -59,7 +59,7 @@ public class Projectile : NetworkBehaviour
 
         // Play sound when enemy gets hit by bullet
         if (collision.collider.tag == "Enemy") {
-            SoundManager.instance.PlaySound(hitSound, transform, 0.4f);
+            SoundManager.instance.PlaySound(hitSound, transform.position, 0.4f);
         }
 
         StartCoroutine(Wait(10.0f));

@@ -13,19 +13,12 @@ public class Pistol : Gun
             return;
         }
 
-        base.Shoot();
         totalInMag--;
 
-        SpawnBulletLocalBullet();
-        if (IsHost) {
-            SpawnBullet();
-        }
-        else {
-            // Spawn a bullet on the client side with no hit-detection
-            // GameObject instance = Instantiate(localProjectile, transform.parent.position + (transform.parent.forward * 2.5f), transform.parent.rotation);
-            // ChangeBulletParameters(instance);
-            SpawnBulletServerRpc();
-        }
+        // Spawn a bullet on the client side with no hit-detection
+        // GameObject instance = Instantiate(localProjectile, transform.parent.position + (transform.parent.forward * 2.5f), transform.parent.rotation);
+        // ChangeBulletParameters(instance);
+        SpawnBulletServerRpc();
 
         StartCoroutine(ShotDelay(0.05f));
     }
@@ -41,7 +34,7 @@ public class Pistol : Gun
     protected IEnumerator PlaySound(float time, AudioClip sound, float volume)
     {
         yield return new WaitForSeconds(time);
-        SoundManager.instance.PlaySound(sound, transform, volume);
+        SoundManager.instance.PlaySound(sound, transform.position, volume);
     }
 
     void SpawnBullet() {
@@ -53,6 +46,7 @@ public class Pistol : Gun
 
     void SpawnBulletLocalBullet() {
         GameObject instance = Instantiate(localProjectile, transform.parent.position + (transform.parent.forward * 2.5f), transform.parent.rotation);
+        SoundManager.instance.PlaySound(shootSFX, instance.transform.position, 0.6f);
         // ChangeBulletParameters(instance);
 
         // Exclude this layers that the projectile can collide with
@@ -75,9 +69,22 @@ public class Pistol : Gun
         dc.ChangeKnockback(knockback);
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     void SpawnBulletServerRpc()
     {
+        SpawnBulletClientRpc();
+    }
+
+    [ClientRpc]
+    void SpawnBulletClientRpc()
+    {
+        // Instantiate a bullet
+        SpawnBulletLocalBullet();
+        if (!IsServer) {
+            return;
+        }
+
+        // Only server can spawn the bullet
         SpawnBullet();
     }
 }

@@ -27,7 +27,7 @@ public class Zombie : Entity
         healthComponent = GetComponent<HealthComponent>();
         body = GetComponent<Rigidbody>();
         
-        if (IsHost) {
+        if (IsServer) {
             player = NetworkManager.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
         }
     }
@@ -39,22 +39,20 @@ public class Zombie : Entity
             StartCoroutine(PlaySound(GetRandomTime()));
         }
 
-        if (player != null) {
-            // Change to a different player that is alive
-            if (IsHost && player.GetComponent<HealthComponent>().currentHP.Value <= 0.0f) {
-                player = NetworkManager.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
-            }
+        if (!IsServer) {
+            return;
         }
-        else {
+
+            // Change to a different player that is alive
+        if (player.GetComponent<HealthComponent>().currentHP.Value <= 0.0f) {
             player = NetworkManager.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
         }
-        
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!IsHost) {
+        if (!IsServer) {
             return;
         }
 
@@ -87,7 +85,7 @@ public class Zombie : Entity
                 if (!playedHurtSound && !playedIdleSound) {
                     playedHurtSound = true;
                     int i = Random.Range(0, idleAudioClips.Length);
-                    SoundManager.instance.PlaySound(hurtAudioClips[i], transform, 0.5f);
+                    SoundManager.instance.PlaySound(hurtAudioClips[i], transform.position, 0.5f);
                 }
             }
         }
@@ -108,7 +106,7 @@ public class Zombie : Entity
         // Pick a random sound
         int i = Random.Range(0, idleAudioClips.Length);
 
-        SoundManager.instance.PlaySound(idleAudioClips[i], transform, 0.5f);
+        SoundManager.instance.PlaySound(idleAudioClips[i], transform.position, 0.5f);
         yield return new WaitForSeconds(idleAudioClips[i].length);
         playingSound = false;
         playedIdleSound = false;
@@ -124,6 +122,6 @@ public class Zombie : Entity
     // Play a sound when killed
     public void PlayDeathSound()
     {
-        SoundManager.instance.PlaySound(deathAudioClip, transform, 0.5f);
+        SoundManager.instance.PlaySound(deathAudioClip, transform.position, 0.5f);
     }
 }

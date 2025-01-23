@@ -49,7 +49,7 @@ public class GameManager : NetworkBehaviour
             networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkManager>();
         }
         else if (scene.name == "Game") {
-            if (IsHost) {
+            if (IsServer) {
                 if (!stageLoaded) {
                     stageLoaded = true;
 
@@ -87,7 +87,7 @@ public class GameManager : NetworkBehaviour
     {
         ResetScore();
         if (isMultiplayer) {
-            if (networkManager.IsHost) {
+            if (networkManager.IsServer) {
                 networkManager.SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
             }
             else {

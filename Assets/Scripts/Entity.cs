@@ -38,6 +38,6 @@ public class Entity : NetworkBehaviour
     private void PlayFootstepSound()
     {
         int i = Random.Range(0, footstepAudioClips.Length);
-        SoundManager.instance.PlaySound(footstepAudioClips[i], transform, 0.2f);
+        SoundManager.instance.PlaySound(footstepAudioClips[i], transform.position, 0.2f);
     }
 }

@@ -38,7 +38,7 @@ public class MPSelectionScreen : NetworkBehaviour
         rightArrow.onClick.AddListener(ArrowPressed);
         leftArrow.onClick.AddListener(ArrowPressed);
 
-        if (!IsHost) {
+        if (!IsServer) {
             rightArrow.gameObject.SetActive(false);
             leftArrow.gameObject.SetActive(false);
             playButton.gameObject.SetActive(false);
@@ -47,7 +47,7 @@ public class MPSelectionScreen : NetworkBehaviour
 
     void Update()
     {
-        if (!IsHost) {
+        if (!IsServer) {
             stageImage.sprite = stagesUI[i.Value];
         }
 
@@ -74,7 +74,7 @@ public class MPSelectionScreen : NetworkBehaviour
     
     private void ArrowPressed()
     {
-        if (IsHost) {
+        if (IsServer) {
             if (i.Value == 0) {
                 stageImage.sprite = stagesUI[i.Value + 1];
                 i.Value += 1;
