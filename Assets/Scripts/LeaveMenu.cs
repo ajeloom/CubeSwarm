@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class LeaveMenu : NetworkBehaviour
 {
-    private NetworkManager networkManager;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -18,18 +16,16 @@ public class LeaveMenu : NetworkBehaviour
 
         yesButton.onClick.AddListener(YesButtonPressed);
         noButton.onClick.AddListener(NoButtonPressed);
-
-        networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkManager>();
     }
 
     private void YesButtonPressed()
     {
-        if (networkManager.IsServer) {
-            networkManager.SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        if (IsServer) {
+            NetworkManager.Singleton.SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         }
         else {
-            networkManager.Shutdown();
-            Destroy(networkManager.gameObject);
+            NetworkManager.Singleton.Shutdown();
+            Destroy(NetworkManager.Singleton.gameObject);
             SceneManager.LoadScene("MainMenu");
         }
     }
@@ -42,7 +38,7 @@ public class LeaveMenu : NetworkBehaviour
     [ClientRpc]
     private void QuitClientRpc()
     {
-        networkManager.Shutdown();
-        Destroy(networkManager.gameObject);
+        NetworkManager.Singleton.Shutdown();
+        Destroy(NetworkManager.Singleton.gameObject);
     }
 }

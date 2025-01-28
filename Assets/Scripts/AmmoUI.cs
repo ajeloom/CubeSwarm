@@ -8,9 +8,7 @@ public class AmmoUI : MonoBehaviour
     private TextMeshProUGUI ammo;
     private TextMeshProUGUI gainedAmmo;
     private GameObject pistol;
-    private GameObject shotgun;
     private GameObject reloadSprite;
-    private GameManager gm;
     private PlayerControls player;
 
     private int currentValue = 0;
@@ -32,27 +30,19 @@ public class AmmoUI : MonoBehaviour
         player = transform.parent.gameObject.GetComponent<PlayerControls>();
         GameObject gunHolder = transform.parent.gameObject.GetComponent<Player>().GetGunHolder();
         pistol = gunHolder.transform.GetChild(0).gameObject;
-        shotgun = gunHolder.transform.GetChild(1).gameObject;
-
-        gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if ((!player.GetPlayerPaused() && !gm.isMultiplayer) || gm.isMultiplayer) {
+        if (!player.GetPlayerPaused()) {
             if (pistol.gameObject.activeSelf == true) {
                 Pistol temp = pistol.GetComponent<Pistol>();
                 PrintText(temp);
 
                 Reloading(temp);
             }
-            else if (shotgun.gameObject.activeSelf == true) {
-                Shotgun temp = shotgun.GetComponent<Shotgun>();
-                PrintText(temp);
 
-                Reloading(temp);
-            }
         }
     }
 

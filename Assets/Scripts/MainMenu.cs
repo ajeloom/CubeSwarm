@@ -20,10 +20,9 @@ public class MainMenu : MonoBehaviour
         settingsButton.onClick.AddListener(SettingsButtonPressed);
         quitButton.onClick.AddListener(QuitButtonPressed);
 
-        if (GameObject.FindWithTag("NetworkManager") != null) {
-            NetworkManager networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkManager>();
-            networkManager.Shutdown();
-            Destroy(networkManager.gameObject);
+        if (NetworkManager.Singleton != null) {
+            NetworkManager.Singleton.Shutdown();
+            Destroy(NetworkManager.Singleton.gameObject);
         }
     }
 

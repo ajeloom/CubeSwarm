@@ -19,9 +19,6 @@ public class Gun : NetworkBehaviour
 
     public bool swapWeapons = false;
 
-    protected GameManager gm;
-    public NetworkManager networkManager;
-
     [SerializeField] protected float damage = 10.0f;
     [SerializeField] protected float knockback = 10.0f;
 
@@ -34,14 +31,8 @@ public class Gun : NetworkBehaviour
         totalInMag = magSize;
         totalAmmoLeft = maxAmmo;
 
-        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-        gm = obj.GetComponent<GameManager>();
-
         audioSource = GetComponent<AudioSource>();
         shootSFX = audioSource.clip;
-
-        if (gm.isMultiplayer)
-            networkManager = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>();
     }
 
     // Update is called once per frame

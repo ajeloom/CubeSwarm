@@ -28,7 +28,7 @@ public class Zombie : Entity
         body = GetComponent<Rigidbody>();
         
         if (IsServer) {
-            player = NetworkManager.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
+            player = NetworkManager.Singleton.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
         }
     }
 
@@ -45,7 +45,7 @@ public class Zombie : Entity
 
             // Change to a different player that is alive
         if (player.GetComponent<HealthComponent>().currentHP.Value <= 0.0f) {
-            player = NetworkManager.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
+            player = NetworkManager.Singleton.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
         }
     }
 
@@ -115,7 +115,7 @@ public class Zombie : Entity
     // Pick a random player
     private ulong GetRandomPlayer()
     {
-        int clientId = Random.Range(0, NetworkManager.ConnectedClients.Count);
+        int clientId = Random.Range(0, NetworkManager.Singleton.ConnectedClients.Count);
         return (ulong)clientId;
     }
 

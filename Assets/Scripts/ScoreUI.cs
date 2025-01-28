@@ -5,7 +5,6 @@ using TMPro;
 
 public class ScoreUI : MonoBehaviour
 {
-    private GameManager gm;
     private TextMeshProUGUI score;
 
     private int localScore = 0;
@@ -18,16 +17,13 @@ public class ScoreUI : MonoBehaviour
         GameObject scoreText = canvas.transform.GetChild(5).gameObject;
         score = scoreText.GetComponent<TextMeshProUGUI>();
 
-        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-        gm = obj.GetComponent<GameManager>();
-
-        score.SetText("Score: " + gm.score.Value.ToString());
+        score.SetText("Score: " + GameManager.instance.score.Value.ToString());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (localScore < gm.score.Value && !incrementingScore) {
+        if (localScore < GameManager.instance.score.Value && !incrementingScore) {
             incrementingScore = true;
             localScore++;
             score.SetText("Score: " + localScore.ToString());

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -28,7 +29,6 @@ public class HealthComponent : NetworkBehaviour
         if (hpSet) {
             if (currentHP.Value <= 0.0f) {
                 if (gameObject.tag == "Player") {
-                    
                 }
                 else {
                     UpdateScoreServerRpc();
@@ -59,9 +59,8 @@ public class HealthComponent : NetworkBehaviour
     private void UpdateScore()
     {
         // Drop an ammo box
-        GameManager gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();        
         Entity entity = GetComponent<Entity>();
-        gm.score.Value += entity.GetScore();
+        GameManager.instance.AddScore(entity.score);
 
         if (GetRandomDrop()) {
             if (!spawnedAmmo) {
@@ -95,7 +94,7 @@ public class HealthComponent : NetworkBehaviour
     // Gives the enemy a random chance to drop ammo
     private bool GetRandomDrop()
     {
-        float num = Random.Range(0, 2);
+        float num = UnityEngine.Random.Range(0, 2);
         bool drop = (num >= 1) ? true : false;
         return drop;
     }

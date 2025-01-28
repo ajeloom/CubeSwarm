@@ -7,7 +7,6 @@ using TMPro;
 
 public class GameOver : MonoBehaviour
 {
-    private GameManager gm;
     private TextMeshProUGUI highScoreText;
     private TextMeshProUGUI scoreText;
     private bool newHighScore = false;
@@ -21,18 +20,17 @@ public class GameOver : MonoBehaviour
         retryButton.onClick.AddListener(RetryButtonPressed);
         mainMenuButton.onClick.AddListener(MainMenuButtonPressed);
 
-        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-        gm = obj.GetComponent<GameManager>();
+        GameManager.instance.GameOverState();
 
         int highScore = PlayerPrefs.GetInt("HighScore");
-        if (gm.score.Value > highScore) {
+        if (GameManager.instance.score.Value > highScore) {
             newHighScore = true;
-            highScore = gm.score.Value;
+            highScore = GameManager.instance.score.Value;
             PlayerPrefs.SetInt("HighScore", highScore);
         }
 
         highScoreText = GetScoreText("High Score", highScore);
-        scoreText = GetScoreText("Score", gm.score.Value);
+        scoreText = GetScoreText("Score", GameManager.instance.score.Value);
     }
 
     void Update()
@@ -45,13 +43,13 @@ public class GameOver : MonoBehaviour
 
     private void RetryButtonPressed()
     {
-        gm.ResetScore();
+        GameManager.instance.ResetScore();
         SceneManager.LoadScene("Stage");
     }
 
     private void MainMenuButtonPressed()
     {
-        gm.ReturnToMainMenu();
+        GameManager.instance.ReturnToMainMenu();
     }
 
     private TextMeshProUGUI GetScoreText(string childName, int score)

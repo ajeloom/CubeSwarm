@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -20,9 +21,7 @@ public class PlayerControls : NetworkBehaviour
 
     private Gun currentGun;
     private GameObject pistol;
-    private GameObject shotgun;
 
-    private GameManager gm;
 
     private GameObject canvas;
 
@@ -35,6 +34,8 @@ public class PlayerControls : NetworkBehaviour
 
     private HealthComponent healthComponent;
     private int equippedGun = 1;
+
+    private bool canControl = false;
 
     public override void OnNetworkSpawn()
     {
@@ -49,18 +50,20 @@ public class PlayerControls : NetworkBehaviour
         player = GetComponent<Player>();
         GameObject gunHolder = player.GetGunHolder();
         pistol = gunHolder.transform.GetChild(0).gameObject;
-        shotgun = gunHolder.transform.GetChild(1).gameObject;
 
         currentGun = pistol.GetComponent<Gun>();
         pistol.SetActive(true);
-        shotgun.SetActive(false);
 
-        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-        gm = obj.GetComponent<GameManager>();
+        GameManager.instance.OnGameStart += Test_OnGameStart;
 
         canvas = transform.Find("HUD").gameObject;
 
         healthComponent = GetComponent<HealthComponent>();
+    }
+
+    private void Test_OnGameStart(object sender, EventArgs e) {
+        canControl = true;
+        GameManager.instance.OnGameStart -= Test_OnGameStart;
     }
 
     // Update is called once per frame
@@ -70,7 +73,7 @@ public class PlayerControls : NetworkBehaviour
             return;
         }
 
-        if (gm.currentScene == "Game") {
+        if (canControl) {
             // Activate the camera for the current player
             if (!activateElements) {
                 activateElements = true;
@@ -105,19 +108,8 @@ public class PlayerControls : NetworkBehaviour
 
                     // Then switch to weapon
                     pistol.SetActive(true);
-                    shotgun.SetActive(false);
                     currentGun = pistol.GetComponent<Gun>();
                 }
-                // else if (Input.GetKeyDown(KeyCode.Alpha2) && equippedGun != 2) {
-                //     equippedGun = 2;
-                //     // Set the attack and reload bool to false
-                //     currentGun.SwapWeapons();
-
-                //     // Then switch to weapon
-                //     pistol.SetActive(false);
-                //     shotgun.SetActive(true);
-                //     currentGun = shotgun.GetComponent<Gun>();
-                // }
 
                 // Shoot Gun
                 if (Input.GetMouseButtonDown(0) && currentGun.canShoot) {
@@ -140,16 +132,10 @@ public class PlayerControls : NetworkBehaviour
                 playerPaused = true;
                 var pausePrefab = Resources.Load<GameObject>("Prefabs/Network/Pause Menu(Network)");
                 pauseMenu = Instantiate(pausePrefab, Vector3.zero, transform.rotation, transform);
-                if (!gm.isMultiplayer) {
-                    Time.timeScale = 0;
-                }
             }
             else if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null) {
                 playerPaused = false;
                 Destroy(pauseMenu);
-                if (!gm.isMultiplayer) {
-                    Time.timeScale = 1;
-                }
             }
         }
     }
@@ -162,7 +148,8 @@ public class PlayerControls : NetworkBehaviour
         
         if (healthComponent.currentHP.Value > 0.0f 
                 && !playerPaused 
-                && gm.currentScene == "Game") {
+                && canControl
+                && cam != null) {
             // Move in the direction that the player presses
             player.Move(direction);
 

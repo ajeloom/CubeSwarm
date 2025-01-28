@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class PauseMenu : NetworkBehaviour
 {
-    private GameManager gm;
     private PlayerControls player;
 
     // Start is called before the first frame update
@@ -19,9 +18,6 @@ public class PauseMenu : NetworkBehaviour
         resumeButton.onClick.AddListener(ResumeButtonPressed);
         quitButton.onClick.AddListener(QuitButtonPressed);
 
-        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-        gm = obj.GetComponent<GameManager>();
-
         player = transform.parent.gameObject.GetComponent<PlayerControls>();
     }
 
@@ -29,13 +25,10 @@ public class PauseMenu : NetworkBehaviour
     {
         Destroy(gameObject);
         player.ChangePause(false);
-        if (!gm.isMultiplayer) {
-            Time.timeScale = 1;
-        }
     }
 
     private void QuitButtonPressed()
     {
-        gm.ReturnToMainMenu();
+        GameManager.instance.ReturnToMainMenu();
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -12,13 +13,12 @@ public class SelectionScreen : NetworkBehaviour
     [SerializeField] private GameObject[] stages = new GameObject[2];
     [SerializeField] private Sprite[] stagesUI = new Sprite[2];
 
-    public NetworkVariable<int> i = new NetworkVariable<int>(0);
+    private int i = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        NetworkManager networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkManager>();
-        networkManager.StartHost();
+        NetworkManager.Singleton.StartHost();
 
         stageImage = transform.Find("Stage").gameObject.GetComponent<Image>();
         stageImage.sprite = stagesUI[0];
@@ -37,9 +37,12 @@ public class SelectionScreen : NetworkBehaviour
 
     private void PlayButtonPressed()
     {
-        GameManager gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        gm.SetStage(stages[i.Value]);
-        NetworkManager.SceneManager.LoadScene("Game", LoadSceneMode.Single);
+        var instance = Instantiate(stages[i]);
+        var instanceNetworkObject = instance.GetComponent<NetworkObject>();
+        instanceNetworkObject.Spawn();
+
+        GameManager.instance.CountDownState();
+        NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
 
     private void BackButtonPressed()
@@ -49,13 +52,13 @@ public class SelectionScreen : NetworkBehaviour
     
     private void ArrowPressed()
     {
-        if (i.Value == 0) {
-            stageImage.sprite = stagesUI[i.Value + 1];
-            i.Value += 1;
+        if (i == 0) {
+            stageImage.sprite = stagesUI[i + 1];
+            i += 1;
         }
         else {
-            stageImage.sprite = stagesUI[i.Value - 1];
-            i.Value -= 1;
+            stageImage.sprite = stagesUI[i - 1];
+            i -= 1;
         }
     }
 }

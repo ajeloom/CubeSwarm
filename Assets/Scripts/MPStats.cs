@@ -8,8 +8,6 @@ using TMPro;
 
 public class MPStats : NetworkBehaviour
 {
-    private GameManager gm;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -19,21 +17,18 @@ public class MPStats : NetworkBehaviour
         // retryButton.onClick.AddListener(RetryButtonPressed);
         mainMenuButton.onClick.AddListener(LobbyButtonPressed);
 
-        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-        gm = obj.GetComponent<GameManager>();
-
-        SetScoreText("Score", gm.score.Value);
+        SetScoreText("Score", GameManager.instance.score.Value);
     }
 
     // private void RetryButtonPressed()
     // {
-    //     gm.ResetScore();
+    //     GameManager.instance.ResetScore();
     //     SceneManager.LoadScene("Stage");
     // }
 
     private void LobbyButtonPressed()
     {
-        gm.ReturnToMainMenu();
+        GameManager.instance.ReturnToMainMenu();
     }
 
     private void SetScoreText(string childName, int score)

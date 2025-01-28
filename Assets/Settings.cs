@@ -22,25 +22,16 @@ public class Settings : MonoBehaviour
 
     void Update()
     {
+        FPSLimiter fps = GameManager.instance.gameObject.GetComponent<FPSLimiter>();
         if (fpsButton.isOn) {
-            FPSLimiter fps = GetFPSLimiter();
             fps.ShowFPS(true);
             PlayerPrefs.SetInt("FPS", 1);
         }
         else {
-            FPSLimiter fps = GetFPSLimiter();
             fps.ShowFPS(false);
             PlayerPrefs.SetInt("FPS", 0);
         }
     }
-
-    private FPSLimiter GetFPSLimiter()
-    {
-        GameObject obj = GameObject.FindGameObjectWithTag("GameManager");
-        FPSLimiter temp = obj.GetComponent<FPSLimiter>();
-        return temp;
-    }
-    
 
     private void BackButtonPressed()
     {

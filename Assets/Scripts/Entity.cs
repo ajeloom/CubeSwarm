@@ -8,7 +8,7 @@ public class Entity : NetworkBehaviour
     [SerializeField] private float movementSpeed = 5.0f;
     public Rigidbody body;
 
-    [SerializeField] private int score;
+    [SerializeField] public int score { get; private set; }
 
     [SerializeField] private AudioClip[] footstepAudioClips;
 
@@ -27,11 +27,6 @@ public class Entity : NetworkBehaviour
     public void Move(Vector3 direction)
     {
         body.velocity = direction * movementSpeed;
-    }
-
-    public int GetScore()
-    {
-        return score;
     }
 
     // Plays a footstep sound during the movement animations

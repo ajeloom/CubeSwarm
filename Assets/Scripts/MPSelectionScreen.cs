@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -8,7 +9,6 @@ using UnityEngine.UI;
 public class MPSelectionScreen : NetworkBehaviour
 {
     private Image stageImage;
-    private NetworkManager m_NetworkManager;
 
     [SerializeField] private GameObject[] stages = new GameObject[2];
     [SerializeField] private Sprite[] stagesUI = new Sprite[2];
@@ -22,8 +22,6 @@ public class MPSelectionScreen : NetworkBehaviour
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
-        m_NetworkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkManager>();
-
         stageImage = transform.Find("Stage").gameObject.GetComponent<Image>();
         stageImage.sprite = stagesUI[0];
 
@@ -49,6 +47,7 @@ public class MPSelectionScreen : NetworkBehaviour
     {
         if (!IsServer) {
             stageImage.sprite = stagesUI[i.Value];
+            return;
         }
 
         if (exitMenu == null) {
@@ -62,9 +61,18 @@ public class MPSelectionScreen : NetworkBehaviour
 
     private void PlayButtonPressed()
     {
-        GameManager gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        gm.SetStage(stages[i.Value]);
-        NetworkManager.SceneManager.LoadScene("Game", LoadSceneMode.Single);
+        if (!IsServer) {
+            return;
+        }
+
+        GameObject instance = Instantiate(stages[i.Value]);
+        var instanceNetworkObject = instance.GetComponent<NetworkObject>();
+        instanceNetworkObject.Spawn();
+
+        // TODO: Move the players to the correct spawn point
+
+        GameManager.instance.CountDownState();
+        NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
 
     private void BackButtonPressed()
@@ -74,15 +82,17 @@ public class MPSelectionScreen : NetworkBehaviour
     
     private void ArrowPressed()
     {
-        if (IsServer) {
-            if (i.Value == 0) {
-                stageImage.sprite = stagesUI[i.Value + 1];
-                i.Value += 1;
-            }
-            else {
-                stageImage.sprite = stagesUI[i.Value - 1];
-                i.Value -= 1;
-            }
+        if (!IsServer) {
+            return;
+        }
+ 
+        if (i.Value == 0) {
+            stageImage.sprite = stagesUI[i.Value + 1];
+            i.Value += 1;
+        }
+        else {
+            stageImage.sprite = stagesUI[i.Value - 1];
+            i.Value -= 1;
         }
     }
 
