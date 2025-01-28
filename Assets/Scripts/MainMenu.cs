@@ -10,7 +10,7 @@ public class MainMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Button playButton = transform.Find("Play").gameObject.GetComponent<Button>();
+        Button playButton = transform.Find("Singleplayer").gameObject.GetComponent<Button>();
         Button multiplayerButton = transform.Find("Multiplayer").gameObject.GetComponent<Button>();
         Button settingsButton = transform.Find("Settings").gameObject.GetComponent<Button>();
         Button quitButton = transform.Find("Quit").gameObject.GetComponent<Button>();
