@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 3714202524
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 1817178305
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -203,6 +203,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countDownText: {fileID: 755187690440175944}
+  playerPrefab: {fileID: 1859307093648306008, guid: d8e555bf28654b243b8819d6db32155a, type: 3}
+  spawnPositions:
+  - {x: -4, y: 0, z: -4}
+  - {x: -4, y: 0, z: 4}
+  - {x: 4, y: 0, z: -4}
+  - {x: 4, y: 0, z: 4}
+  score:
+    m_InternalValue: 0
   currentScene: 
 --- !u!114 &1766601144092235520
 MonoBehaviour:

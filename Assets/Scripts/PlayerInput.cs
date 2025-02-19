@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerControls : NetworkBehaviour
+public class PlayerInput : NetworkBehaviour
 {
     private Player player;
 
@@ -59,6 +59,18 @@ public class PlayerControls : NetworkBehaviour
         canvas = transform.Find("HUD").gameObject;
 
         healthComponent = GetComponent<HealthComponent>();
+
+        // Set the main camera to follow the player
+        cam = Camera.main;
+        CameraFollow temp = cam.GetComponent<CameraFollow>();
+        temp.SetTarget(gameObject);
+    }
+
+    private void Awake()
+    {
+        if (!IsOwner) {
+            return;
+        }
     }
 
     private void Test_OnGameStart(object sender, EventArgs e) {
@@ -78,11 +90,6 @@ public class PlayerControls : NetworkBehaviour
             if (!activateElements) {
                 activateElements = true;
                 canvas.SetActive(true);
-
-                // Set the main camera to follow the player
-                cam = Camera.main;
-                CameraFollow temp = cam.GetComponent<CameraFollow>();
-                temp.SetTarget(gameObject);
             }
 
             // Handle animation for moving
@@ -148,8 +155,7 @@ public class PlayerControls : NetworkBehaviour
         
         if (healthComponent.currentHP.Value > 0.0f 
                 && !playerPaused 
-                && canControl
-                && cam != null) {
+                && canControl) {
             // Move in the direction that the player presses
             player.Move(direction);
 

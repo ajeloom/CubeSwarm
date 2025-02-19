@@ -19,7 +19,7 @@ public class EnemySpawner : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsServer) {
+        if (!NetworkManager.Singleton.IsServer) {
             return;
         }
 

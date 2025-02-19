@@ -27,7 +27,7 @@ public class Zombie : Entity
         healthComponent = GetComponent<HealthComponent>();
         body = GetComponent<Rigidbody>();
         
-        if (IsServer) {
+        if (NetworkManager.Singleton.IsServer) {
             player = NetworkManager.Singleton.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
         }
     }
@@ -39,11 +39,11 @@ public class Zombie : Entity
             StartCoroutine(PlaySound(GetRandomTime()));
         }
 
-        if (!IsServer) {
+        if (!NetworkManager.Singleton.IsServer) {
             return;
         }
 
-            // Change to a different player that is alive
+        // Change to a different player that is alive
         if (player.GetComponent<HealthComponent>().currentHP.Value <= 0.0f) {
             player = NetworkManager.Singleton.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
         }
@@ -52,7 +52,7 @@ public class Zombie : Entity
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!IsServer) {
+        if (!NetworkManager.Singleton.IsServer) {
             return;
         }
 

@@ -17,8 +17,10 @@ public class DamageComponent : NetworkBehaviour
     public void Damage()
     {
         HealthComponent health = col.gameObject.GetComponent<HealthComponent>();
-        health.currentHP.Value -= damageNumber;
-        health.SetTakingDamage(true);
+        if (health != null) {
+            health.currentHP.Value -= damageNumber;
+            health.SetTakingDamage(true);
+        }
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -35,7 +37,7 @@ public class DamageComponent : NetworkBehaviour
             col = collision;
             hitted = true;
 
-            if (IsServer) {
+            if (NetworkManager.Singleton.IsServer) {
                 Damage();
             }
             else {

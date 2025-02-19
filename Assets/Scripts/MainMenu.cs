@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    // Awake is called even if script is not enabled
+    void Awake()
     {
         Button playButton = transform.Find("Singleplayer").gameObject.GetComponent<Button>();
         Button multiplayerButton = transform.Find("Multiplayer").gameObject.GetComponent<Button>();
@@ -19,6 +19,11 @@ public class MainMenu : MonoBehaviour
         multiplayerButton.onClick.AddListener(MultiplayerButtonPressed);
         settingsButton.onClick.AddListener(SettingsButtonPressed);
         quitButton.onClick.AddListener(QuitButtonPressed);
+
+        // Destroy GameManager and NetworkManager
+        if (GameManager.instance != null) {
+            Destroy(GameManager.instance.gameObject);
+        }
 
         if (NetworkManager.Singleton != null) {
             NetworkManager.Singleton.Shutdown();

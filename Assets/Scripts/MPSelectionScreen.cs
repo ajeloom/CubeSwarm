@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,33 +20,39 @@ public class MPSelectionScreen : NetworkBehaviour
 
     private GameObject exitMenu;
 
+    private Dictionary<ulong, bool> playerReadyDictionary;
+
+    private bool ready = false;
+
+    private void Awake()
+    {
+        playerReadyDictionary = new Dictionary<ulong, bool>();
+    }
+
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
         stageImage = transform.Find("Stage").gameObject.GetComponent<Image>();
         stageImage.sprite = stagesUI[0];
 
-        Button playButton = transform.Find("Play").gameObject.GetComponent<Button>();
+        Button readyButton = transform.Find("Ready").gameObject.GetComponent<Button>();
         Button backButton = transform.Find("Back").gameObject.GetComponent<Button>();
 
         Button rightArrow = transform.Find("Right").gameObject.GetComponent<Button>();
         Button leftArrow = transform.Find("Left").gameObject.GetComponent<Button>();
 
-        playButton.onClick.AddListener(PlayButtonPressed);
+        readyButton.onClick.AddListener(ReadyButtonPressed);
         backButton.onClick.AddListener(BackButtonPressed);
         rightArrow.onClick.AddListener(ArrowPressed);
         leftArrow.onClick.AddListener(ArrowPressed);
 
-        if (!IsServer) {
-            rightArrow.gameObject.SetActive(false);
-            leftArrow.gameObject.SetActive(false);
-            playButton.gameObject.SetActive(false);
-        }
+        rightArrow.gameObject.SetActive(NetworkManager.Singleton.IsServer);
+        leftArrow.gameObject.SetActive(NetworkManager.Singleton.IsServer);
     }
 
     void Update()
     {
-        if (!IsServer) {
+        if (!NetworkManager.Singleton.IsServer) {
             stageImage.sprite = stagesUI[i.Value];
             return;
         }
@@ -58,20 +65,52 @@ public class MPSelectionScreen : NetworkBehaviour
         }
     }
 
-
-    private void PlayButtonPressed()
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
-        if (!IsServer) {
-            return;
+        playerReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
+        
+        bool allPlayersReady = true;
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds) {
+            if (!playerReadyDictionary.ContainsKey(clientId) || !playerReadyDictionary[clientId]) {
+                allPlayersReady = false;
+                break;
+            }
         }
 
+        if (allPlayersReady) {
+            StartGame();
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerUnreadyServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        playerReadyDictionary[serverRpcParams.Receive.SenderClientId] = false;
+    }
+
+    private void ReadyButtonPressed()
+    {
+        Button readyButton = transform.Find("Ready").gameObject.GetComponent<Button>();
+        TextMeshProUGUI buttonText = readyButton.transform.Find("Text (TMP)").gameObject.GetComponent<TextMeshProUGUI>();
+        if (!ready) {
+            ready = true;
+            buttonText.text = "Unready";
+            SetPlayerReadyServerRpc();
+        }
+        else {
+            ready = false;
+            buttonText.text = "Ready";
+            SetPlayerUnreadyServerRpc();
+        }
+        
+    }
+
+    private void StartGame()
+    {
         GameObject instance = Instantiate(stages[i.Value]);
         var instanceNetworkObject = instance.GetComponent<NetworkObject>();
         instanceNetworkObject.Spawn();
-
-        // TODO: Move the players to the correct spawn point
-
-        GameManager.instance.CountDownState();
         NetworkManager.Singleton.SceneManager.LoadScene("Game", LoadSceneMode.Single);
     }
 
@@ -82,7 +121,7 @@ public class MPSelectionScreen : NetworkBehaviour
     
     private void ArrowPressed()
     {
-        if (!IsServer) {
+        if (!NetworkManager.Singleton.IsServer) {
             return;
         }
  
@@ -98,7 +137,7 @@ public class MPSelectionScreen : NetworkBehaviour
 
     private void SetButtonInteraction(bool value)
     {
-        Button playButton = transform.Find("Play").gameObject.GetComponent<Button>();
+        Button playButton = transform.Find("Ready").gameObject.GetComponent<Button>();
         Button backButton = transform.Find("Back").gameObject.GetComponent<Button>();
 
         Button rightArrow = transform.Find("Right").gameObject.GetComponent<Button>();

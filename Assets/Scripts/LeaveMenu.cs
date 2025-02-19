@@ -20,7 +20,7 @@ public class LeaveMenu : NetworkBehaviour
 
     private void YesButtonPressed()
     {
-        if (IsServer) {
+        if (NetworkManager.Singleton.IsServer) {
             NetworkManager.Singleton.SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         }
         else {

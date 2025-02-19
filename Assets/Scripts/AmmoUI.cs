@@ -9,7 +9,7 @@ public class AmmoUI : MonoBehaviour
     private TextMeshProUGUI gainedAmmo;
     private GameObject pistol;
     private GameObject reloadSprite;
-    private PlayerControls player;
+    private PlayerInput player;
 
     private int currentValue = 0;
     private bool isFading = false;
@@ -27,7 +27,7 @@ public class AmmoUI : MonoBehaviour
         reloadSprite = canvas.transform.GetChild(4).gameObject;
         reloadSprite.SetActive(false);
 
-        player = transform.parent.gameObject.GetComponent<PlayerControls>();
+        player = transform.parent.gameObject.GetComponent<PlayerInput>();
         GameObject gunHolder = transform.parent.gameObject.GetComponent<Player>().GetGunHolder();
         pistol = gunHolder.transform.GetChild(0).gameObject;
     }

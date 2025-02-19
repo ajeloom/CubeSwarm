@@ -49,7 +49,7 @@ public class GameOver : MonoBehaviour
 
     private void MainMenuButtonPressed()
     {
-        GameManager.instance.ReturnToMainMenu();
+        GameManager.instance.QuitGame();
     }
 
     private TextMeshProUGUI GetScoreText(string childName, int score)

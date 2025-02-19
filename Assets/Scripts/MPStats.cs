@@ -28,7 +28,7 @@ public class MPStats : NetworkBehaviour
 
     private void LobbyButtonPressed()
     {
-        GameManager.instance.ReturnToMainMenu();
+        GameManager.instance.QuitGame();
     }
 
     private void SetScoreText(string childName, int score)

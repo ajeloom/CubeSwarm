@@ -80,7 +80,7 @@ public class Pistol : Gun
     {
         // Instantiate a bullet
         SpawnBulletLocalBullet();
-        if (!IsServer) {
+        if (!NetworkManager.Singleton.IsServer) {
             return;
         }
 

@@ -8,7 +8,7 @@ public class Entity : NetworkBehaviour
     [SerializeField] private float movementSpeed = 5.0f;
     public Rigidbody body;
 
-    [SerializeField] public int score { get; private set; }
+    [SerializeField] private int score;
 
     [SerializeField] private AudioClip[] footstepAudioClips;
 
@@ -34,5 +34,10 @@ public class Entity : NetworkBehaviour
     {
         int i = Random.Range(0, footstepAudioClips.Length);
         SoundManager.instance.PlaySound(footstepAudioClips[i], transform.position, 0.2f);
+    }
+
+    public int GetScore()
+    {
+        return score;
     }
 }

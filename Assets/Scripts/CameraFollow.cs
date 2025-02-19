@@ -7,7 +7,7 @@ public class CameraFollow : MonoBehaviour
     private GameObject player;
     [SerializeField] private float smoothTime = 0.25f;
     private Vector3 velocity = Vector3.zero;
-    private Vector3 offset;
+    private Vector3 offset = new Vector3(-15.0f, 15.0f, 0.0f);
 
     void LateUpdate()
     {
@@ -20,6 +20,5 @@ public class CameraFollow : MonoBehaviour
     public void SetTarget(GameObject Player)
     {
         player = Player;
-        offset = transform.position - player.transform.position;
     }
 }

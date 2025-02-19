@@ -17,7 +17,7 @@ public class HealthComponent : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer) {
+        if (NetworkManager.Singleton.IsServer) {
             currentHP.Value = maxHP.Value;
             hpSet = true;
         }
@@ -60,7 +60,7 @@ public class HealthComponent : NetworkBehaviour
     {
         // Drop an ammo box
         Entity entity = GetComponent<Entity>();
-        GameManager.instance.AddScore(entity.score);
+        GameManager.instance.AddScore(entity.GetScore());
 
         if (GetRandomDrop()) {
             if (!spawnedAmmo) {
