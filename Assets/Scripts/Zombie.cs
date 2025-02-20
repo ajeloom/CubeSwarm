@@ -21,6 +21,8 @@ public class Zombie : Entity
     private bool playedIdleSound = false;
     private bool playedHurtSound = false;
 
+    private ulong targetId;
+
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
@@ -28,7 +30,16 @@ public class Zombie : Entity
         body = GetComponent<Rigidbody>();
         
         if (NetworkManager.Singleton.IsServer) {
-            player = NetworkManager.Singleton.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
+            ChooseTarget();
+        }
+
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+    }
+
+    private void OnClientDisconnected(ulong clientId)
+    {
+        if (targetId == clientId) {
+            player = null;
         }
     }
 
@@ -44,8 +55,8 @@ public class Zombie : Entity
         }
 
         // Change to a different player that is alive
-        if (player.GetComponent<HealthComponent>().currentHP.Value <= 0.0f) {
-            player = NetworkManager.Singleton.ConnectedClients[GetRandomPlayer()].PlayerObject.gameObject;
+        if (player == null || player.GetComponent<HealthComponent>().currentHP.Value <= 0.0f) {
+            ChooseTarget();
         }
     }
 
@@ -91,6 +102,12 @@ public class Zombie : Entity
         }
     }
 
+    private void ChooseTarget()
+    {
+        targetId = GetRandomPlayer();
+        player = NetworkManager.Singleton.ConnectedClients[targetId].PlayerObject.gameObject;
+    }
+
     // Get a random time before replaying sound
     private float GetRandomTime()
     {
@@ -115,7 +132,7 @@ public class Zombie : Entity
     // Pick a random player
     private ulong GetRandomPlayer()
     {
-        int clientId = Random.Range(0, NetworkManager.Singleton.ConnectedClients.Count);
+        int clientId = Random.Range(0, NetworkManager.Singleton.ConnectedClientsIds.Count);
         return (ulong)clientId;
     }
 
@@ -123,5 +140,11 @@ public class Zombie : Entity
     public void PlayDeathSound()
     {
         SoundManager.instance.PlaySound(deathAudioClip, transform.position, 0.5f);
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
     }
 }
