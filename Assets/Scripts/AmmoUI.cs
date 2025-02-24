@@ -17,14 +17,14 @@ public class AmmoUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameObject canvas = transform.GetChild(0).gameObject;
-        GameObject ammoText = canvas.transform.GetChild(3).gameObject;
+        GameObject canvas = transform.Find("Canvas").gameObject;
+        GameObject ammoText = canvas.transform.Find("AmmoNumber").gameObject;
         ammo = ammoText.GetComponent<TextMeshProUGUI>();
 
         GameObject gainedText = canvas.transform.Find("GainedAmmo").gameObject;
         gainedAmmo = gainedText.GetComponent<TextMeshProUGUI>();
 
-        reloadSprite = canvas.transform.GetChild(4).gameObject;
+        reloadSprite = canvas.transform.Find("Reload").gameObject;
         reloadSprite.SetActive(false);
 
         player = transform.parent.gameObject.GetComponent<PlayerInput>();

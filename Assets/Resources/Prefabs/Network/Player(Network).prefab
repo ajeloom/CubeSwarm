@@ -317,7 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 159169967
+  GlobalObjectIdHash: 3903535711
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -340,6 +340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 8
   body: {fileID: 6942174404900919585}
+  score: 0
   footstepAudioClips:
   - {fileID: 8300000, guid: 9ea11a2d13d536e4e8441a0f5895995c, type: 3}
   - {fileID: 8300000, guid: 203ac8b6f07070e4f93f1c1a6fff06c3, type: 3}
@@ -351,11 +352,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f1547ad8fbfa4f24d83e5a445aee860d, type: 3}
   - {fileID: 8300000, guid: 47832b56ccba5bc408b1d5aac1871746, type: 3}
   - {fileID: 8300000, guid: 3d132da7af60f1145a3deb6a8bc42a08, type: 3}
-  spawnPositions:
-  - {x: -4, y: 0, z: -4}
-  - {x: -4, y: 0, z: 4}
-  - {x: 4, y: 0, z: -4}
-  - {x: 4, y: 0, z: 4}
 --- !u!114 &1066752059487251133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,11 +372,6 @@ MonoBehaviour:
   projectile: {fileID: 4773737281214919604, guid: cf341521a62957c4e8e8c8ddc4eb69a2, type: 3}
   animator: {fileID: 1859307093657616524}
   pausePrefab: {fileID: 1170910178337764701, guid: 5ed55f65e0e5cbf46aa02ecbea927b2d, type: 3}
-  spawnPositions:
-  - {x: -4, y: 0, z: -4}
-  - {x: -4, y: 0, z: 4}
-  - {x: 4, y: 0, z: -4}
-  - {x: 4, y: 0, z: 4}
 --- !u!114 &6708866394247137367
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -71,6 +71,8 @@ public class HealthComponent : NetworkBehaviour
             }
         }
 
+        GameManager.instance.enemiesKilled.Value++;
+
         gameObject.GetComponent<NetworkObject>().Despawn();
         PlayDeathSoundClientRpc();
     }

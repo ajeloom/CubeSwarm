@@ -7,13 +7,24 @@ using UnityEngine;
 public class EnemySpawner : NetworkBehaviour
 {
     [SerializeField] private GameObject enemy;
-    [SerializeField] private float timer = 3.0f;
     public bool spawnedEnemy = false;
 
-    // Start is called before the first frame update
-    void Start() 
+    private int enemiesSpawnedInRound = 0;
+
+    private bool startSpawning = false;
+    private float countDownTimer = 4.0f;
+
+    private bool waveStarted = false;
+
+    private void Awake()
     {
-        
+        GameManager.instance.OnWaveStart += NewWaveStarted;
+    }
+
+    private void NewWaveStarted(object sender, EventArgs e)
+    {
+        waveStarted = true;
+        enemiesSpawnedInRound = 0;
     }
 
     // Update is called once per frame
@@ -23,19 +34,51 @@ public class EnemySpawner : NetworkBehaviour
             return;
         }
 
-        if (!spawnedEnemy) {
-            spawnedEnemy = true;
-            var instance = Instantiate(enemy, transform.position, transform.rotation);
-            var instanceNetworkObject = instance.GetComponent<NetworkObject>();
-            instanceNetworkObject.Spawn();
+        // Wait some time before spawner starts spawning enemies
+        if (waveStarted) {
+            countDownTimer -= Time.deltaTime;
+            int time = (int)countDownTimer;
 
-            StartCoroutine(Wait(timer));
+            if (time <= 0) {
+                waveStarted = false;
+                startSpawning = true;
+                countDownTimer = 4.0f;
+            }
+        }
+
+        if (startSpawning) {
+            if (!spawnedEnemy) {
+                spawnedEnemy = true;
+                var instance = Instantiate(enemy, transform.position, transform.rotation);
+                var instanceNetworkObject = instance.GetComponent<NetworkObject>();
+                instanceNetworkObject.Spawn();
+
+                enemiesSpawnedInRound++;
+
+                StartCoroutine(Wait());
+            }
+        }
+
+        // Stop spawning enemies when all the enemies for that spawner has been spawned
+        if (enemiesSpawnedInRound == GameManager.instance.waveNumber.Value + GameManager.instance.enemiesPerSpawn) {
+            startSpawning = false;
         }
     }
 
-    private IEnumerator Wait(float time)
+    private IEnumerator Wait()
     {
-        yield return new WaitForSeconds(time);
+        int wave = GameManager.instance.waveNumber.Value - 1;
+        float waitTime = wave * 0.15f;
+        if (waitTime > 5.0f) {
+            waitTime = 5.0f;
+        }
+        yield return new WaitForSeconds(GetRandomTime(5.0f - waitTime, 12.0f - waitTime));
         spawnedEnemy = false;
+    }
+
+    private float GetRandomTime(float min, float max)
+    {
+        float time = UnityEngine.Random.Range(min, max);
+        return time;
     }
 }

@@ -22,7 +22,6 @@ public class PlayerInput : NetworkBehaviour
     private Gun currentGun;
     private GameObject pistol;
 
-
     private GameObject canvas;
 
     private bool activateElements = false;
@@ -86,7 +85,7 @@ public class PlayerInput : NetworkBehaviour
         }
 
         if (canControl) {
-            // Activate the camera for the current player
+            // Show the player's HUD
             if (!activateElements) {
                 activateElements = true;
                 canvas.SetActive(true);
@@ -179,12 +178,5 @@ public class PlayerInput : NetworkBehaviour
     public void ChangePause(bool value)
     {
         playerPaused = value;
-    }
-
-    [ServerRpc]
-    void SpawnPauseMenuServerRpc()
-    {
-        pauseMenu = Instantiate(pausePrefab, Vector3.zero, transform.rotation, transform);
-        pauseMenu.GetComponent<NetworkObject>().Spawn();
     }
 }
